@@ -1,0 +1,918 @@
+<!doctype html>
+<html lang="bn" class="h-full">
+ <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>শিক্ষার্থী ব্যবস্থাপনা | Student Management Dashboard</title>
+  <script src="https://cdn.tailwindcss.com/3.4.17"></script>
+  <script src="/_sdk/element_sdk.js"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@300;400;500;600;700&amp;family=Poppins:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary-green: #0d6e3f;
+      --secondary-gold: #c9a227;
+      --dark-text: #1a1a2e;
+      --light-bg: #f8f9fa;
+      --card-bg: #ffffff;
+    }
+    
+    * {
+      font-family: 'Hind Siliguri', 'Poppins', sans-serif;
+    }
+    
+    .font-bengali {
+      font-family: 'Hind Siliguri', sans-serif;
+    }
+    
+    .font-english {
+      font-family: 'Poppins', sans-serif;
+    }
+    
+    html, body {
+      height: 100%;
+      background: linear-gradient(135deg, #f0fdf4 0%, #fef3c7 100%);
+    }
+    
+    .header-gradient {
+      background: linear-gradient(135deg, rgba(13, 110, 63, 0.95) 0%, rgba(201, 162, 39, 0.95) 100%);
+      backdrop-filter: blur(10px);
+    }
+    
+    .search-input {
+      transition: all 0.3s ease;
+      border: 2px solid rgba(13, 110, 63, 0.2);
+      background: white;
+    }
+    
+    .search-input:focus {
+      border-color: var(--primary-green);
+      box-shadow: 0 0 20px rgba(13, 110, 63, 0.3);
+      outline: none;
+    }
+    
+    .student-card {
+      background: white;
+      border-radius: 12px;
+      overflow: hidden;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+      animation: slideUp 0.5s ease;
+    }
+    
+    .student-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
+    }
+    
+    @keyframes slideUp {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    
+    .add-student-btn {
+      width: 80px;
+      height: 80px;
+      border-radius: 12px;
+      background: linear-gradient(135deg, var(--primary-green) 0%, var(--secondary-gold) 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 36px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 12px rgba(13, 110, 63, 0.3);
+      border: none;
+      color: white;
+    }
+    
+    .add-student-btn:hover {
+      transform: scale(1.05) translateY(-2px);
+      box-shadow: 0 8px 20px rgba(13, 110, 63, 0.4);
+    }
+    
+    .modal {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.5);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+      padding: 20px;
+      animation: fadeIn 0.3s ease;
+    }
+    
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+      }
+      to {
+        opacity: 1;
+      }
+    }
+    
+    .modal.hidden {
+      display: none;
+    }
+    
+    .modal-content {
+      background: white;
+      border-radius: 16px;
+      max-width: 600px;
+      max-height: 90vh;
+      overflow-y: auto;
+      animation: slideDown 0.3s ease;
+      width: 100%;
+    }
+    
+    @keyframes slideDown {
+      from {
+        transform: translateY(-50px);
+        opacity: 0;
+      }
+      to {
+        transform: translateY(0);
+        opacity: 1;
+      }
+    }
+    
+    .modal-header {
+      background: linear-gradient(135deg, var(--primary-green) 0%, var(--secondary-gold) 100%);
+      color: white;
+      padding: 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-radius: 16px 16px 0 0;
+    }
+    
+    .modal-header h2 {
+      margin: 0;
+      font-size: 1.5rem;
+      font-weight: 700;
+    }
+    
+    .modal-body {
+      padding: 24px;
+    }
+    
+    .modal-footer {
+      padding: 16px 24px;
+      border-top: 1px solid #e5e7eb;
+      display: flex;
+      gap: 12px;
+      justify-content: flex-end;
+    }
+    
+    .info-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+    
+    .info-item {
+      background: #f9fafb;
+      padding: 12px;
+      border-radius: 8px;
+      border-left: 3px solid var(--primary-green);
+    }
+    
+    .info-label {
+      font-size: 0.8rem;
+      color: #6b7280;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 4px;
+    }
+    
+    .info-value {
+      font-size: 1rem;
+      color: var(--dark-text);
+      font-weight: 600;
+    }
+    
+    .btn {
+      padding: 10px 16px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 600;
+      transition: all 0.3s ease;
+      font-size: 0.9rem;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+    
+    .btn-primary {
+      background: linear-gradient(135deg, var(--primary-green) 0%, #1a8f5c 100%);
+      color: white;
+    }
+    
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(13, 110, 63, 0.3);
+    }
+    
+    .btn-secondary {
+      background: #6b7280;
+      color: white;
+    }
+    
+    .btn-secondary:hover {
+      background: #4b5563;
+    }
+    
+    .btn-danger {
+      background: #dc2626;
+      color: white;
+    }
+    
+    .btn-danger:hover {
+      background: #b91c1c;
+    }
+    
+    .btn-edit {
+      background: #3b82f6;
+      color: white;
+    }
+    
+    .btn-edit:hover {
+      background: #2563eb;
+    }
+    
+    .icon-btn {
+      width: 36px;
+      height: 36px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 8px;
+      border: none;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    
+    .icon-btn-view {
+      background: #e0f2fe;
+      color: #0369a1;
+    }
+    
+    .icon-btn-view:hover {
+      background: #0369a1;
+      color: white;
+    }
+    
+    .icon-btn-edit {
+      background: #dbeafe;
+      color: #1e40af;
+    }
+    
+    .icon-btn-edit:hover {
+      background: #1e40af;
+      color: white;
+    }
+    
+    .icon-btn-delete {
+      background: #fee2e2;
+      color: #dc2626;
+    }
+    
+    .icon-btn-delete:hover {
+      background: #dc2626;
+      color: white;
+    }
+    
+    .loading-spinner {
+      border: 3px solid #f3f3f3;
+      border-top: 3px solid var(--primary-green);
+      border-radius: 50%;
+      width: 32px;
+      height: 32px;
+      animation: spin 1s linear infinite;
+      margin: 20px auto;
+    }
+    
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+    
+    .toast {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      padding: 16px 24px;
+      border-radius: 8px;
+      color: white;
+      font-weight: 600;
+      animation: slideIn 0.3s ease;
+      z-index: 2000;
+    }
+    
+    @keyframes slideIn {
+      from {
+        transform: translateX(100%);
+        opacity: 0;
+      }
+      to {
+        transform: translateX(0);
+        opacity: 1;
+      }
+    }
+    
+    .toast-success {
+      background: linear-gradient(135deg, #059669 0%, #10b981 100%);
+    }
+    
+    .toast-error {
+      background: linear-gradient(135deg, #dc2626 0%, #ef4444 100%);
+    }
+    
+    .toast-info {
+      background: linear-gradient(135deg, #0369a1 0%, #0ea5e9 100%);
+    }
+    
+    .empty-state {
+      text-align: center;
+      padding: 60px 20px;
+      color: #6b7280;
+    }
+    
+    .empty-state-icon {
+      font-size: 64px;
+      margin-bottom: 16px;
+      opacity: 0.5;
+    }
+    
+    .filter-chip {
+      display: inline-block;
+      background: linear-gradient(135deg, rgba(13, 110, 63, 0.2) 0%, rgba(201, 162, 39, 0.2) 100%);
+      color: var(--primary-green);
+      padding: 6px 16px;
+      border-radius: 20px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      margin-right: 8px;
+      margin-bottom: 8px;
+    }
+    
+    .filter-chip.active {
+      background: linear-gradient(135deg, var(--primary-green) 0%, var(--secondary-gold) 100%);
+      color: white;
+    }
+    
+    .confirmation-text {
+      background: #fef3c7;
+      border-left: 4px solid var(--secondary-gold);
+      padding: 12px;
+      border-radius: 6px;
+      margin: 16px 0;
+      color: #92400e;
+      font-weight: 500;
+    }
+  </style>
+  <style>body { box-sizing: border-box; }</style>
+  <script src="/_sdk/data_sdk.js" type="text/javascript"></script>
+ </head>
+ <body class="h-full overflow-auto">
+  <div id="app" class="h-full flex flex-col"><!-- Header -->
+   <div class="header-gradient sticky top-0 z-40 shadow-lg">
+    <div class="max-w-7xl mx-auto px-4 md:px-6 py-6">
+     <div class="flex items-center justify-between mb-4">
+      <div class="flex items-center gap-3">
+       <div class="w-14 h-14 bg-white rounded-full flex items-center justify-center shadow-lg">
+        <svg viewbox="0 0 100 100" class="w-10 h-10">
+         <circle cx="50" cy="50" r="45" fill="#0d6e3f" stroke="#c9a227" stroke-width="3" /> <text x="50" y="55" text-anchor="middle" fill="#ffffff" font-size="16" font-weight="bold">
+          👥
+         </text>
+        </svg>
+       </div>
+       <div class="text-white">
+        <h1 class="text-2xl font-bold font-bengali" id="header-institution-bn">দারুল মোস্তফা সাঃ ইসলামী একাডেমি</h1>
+        <p class="text-emerald-100 text-sm font-english" id="header-institution-en">Darul Mustafa (SAW) Islamic Academy</p>
+       </div>
+      </div><button class="add-student-btn" onclick="redirectToAddStudent()" title="Add New Student"> + </button>
+     </div><!-- Search & Filter -->
+     <div class="bg-white/10 backdrop-blur-md rounded-xl p-4 space-y-4">
+      <div class="flex gap-2 flex-wrap items-center"><input type="text" id="search-input" class="search-input flex-1 min-w-[250px] px-4 py-2 rounded-lg font-english" placeholder="Search by Student Name..." onkeyup="filterStudents()"> <select id="class-filter" class="search-input px-4 py-2 rounded-lg font-bengali" onchange="filterStudents()"> <option value="">সব শ্রেণী | All Classes</option> </select> <button onclick="clearFilters()" class="btn btn-secondary">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+        </svg><span class="font-bengali">রিসেট</span> </button>
+      </div>
+      <div id="active-filters" class="flex flex-wrap gap-2"></div>
+     </div>
+    </div>
+   </div><!-- Main Content -->
+   <div class="flex-1 overflow-auto p-4 md:p-6">
+    <div class="max-w-7xl mx-auto"><!-- Loading State -->
+     <div id="loading-state" class="text-center">
+      <div class="loading-spinner"></div>
+      <p class="text-gray-600 font-bengali mt-4">শিক্ষার্থীদের তালিকা লোড হচ্ছে...</p>
+     </div><!-- Empty State -->
+     <div id="empty-state" class="hidden empty-state">
+      <div class="empty-state-icon">
+       📚
+      </div>
+      <h2 class="text-2xl font-bold text-gray-700 mb-2 font-bengali">কোনো শিক্ষার্থী পাওয়া যায়নি</h2>
+      <p class="text-gray-600 font-english">No students found</p>
+     </div><!-- Student Grid -->
+     <div id="students-container" class="hidden grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"><!-- Cards will be inserted here -->
+     </div><!-- Error State -->
+     <div id="error-state" class="hidden text-center py-12 px-4">
+      <div class="text-6xl mb-4">
+       ❌
+      </div>
+      <h2 class="text-2xl font-bold text-gray-700 mb-2 font-bengali">ডাটা লোড করতে সমস্যা হয়েছে</h2>
+      <p class="text-gray-600 font-english mb-4">Failed to load student data</p>
+      <p class="text-gray-500 text-sm font-bengali mb-4" id="error-message">সার্ভারের সাথে সংযোগ করতে ব্যর্থ। পরে আবার চেষ্টা করুন।</p><button onclick="loadStudents()" class="btn btn-primary">
+       <svg class="w-4 h-4" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+       </svg><span class="font-bengali">পুনরায় চেষ্টা করুন</span> </button>
+     </div>
+    </div>
+   </div>
+  </div><!-- Modals --> <!-- Details Modal -->
+  <div id="details-modal" class="modal hidden">
+   <div class="modal-content">
+    <div class="modal-header">
+     <h2 class="font-bengali">শিক্ষার্থীর বিস্তারিত তথ্য</h2><button onclick="closeDetailsModal()" style="background: none; border: none; color: white; font-size: 24px; cursor: pointer;">×</button>
+    </div>
+    <div class="modal-body">
+     <div class="flex gap-6 mb-6"><img id="detail-photo" src="" alt="Student" class="w-32 h-40 object-cover rounded-lg shadow-md" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22%3E%3Crect fill=%22%23ddd%22 width=%22100%22 height=%22100%22/%3E%3Ctext x=%2250%22 y=%2250%22 text-anchor=%22middle%22 dy=%22.3em%22 fill=%22%23999%22 font-size=%2224%22%3E📷%3C/text%3E%3C/svg%3E'">
+      <div class="flex-1">
+       <h3 id="detail-name-bn" class="text-2xl font-bold text-gray-900 font-bengali mb-1">Student Name</h3>
+       <p id="detail-name-en" class="text-lg text-gray-600 font-english mb-4">Student Name EN</p>
+       <div class="space-y-3">
+        <div class="info-item">
+         <div class="info-label font-bengali">
+          শিক্ষার্থী আইডি
+         </div>
+         <div class="info-value" id="detail-id">
+          STU001
+         </div>
+        </div>
+        <div class="info-item">
+         <div class="info-label font-bengali">
+          শ্রেণী
+         </div>
+         <div class="info-value" id="detail-class">
+          Class 1
+         </div>
+        </div>
+        <div class="info-item">
+         <div class="info-label font-bengali">
+          ইউজারনেম
+         </div>
+         <div class="info-value" id="detail-username">
+          username
+         </div>
+        </div>
+       </div>
+      </div>
+     </div>
+     <hr class="my-6">
+     <div class="grid grid-cols-2 gap-4 mb-6">
+      <div class="info-item">
+       <div class="info-label font-bengali">
+        জন্ম তারিখ
+       </div>
+       <div class="info-value" id="detail-dob">
+        --
+       </div>
+      </div>
+      <div class="info-item">
+       <div class="info-label font-bengali">
+        লিঙ্গ
+       </div>
+       <div class="info-value" id="detail-gender">
+        --
+       </div>
+      </div>
+      <div class="info-item">
+       <div class="info-label font-bengali">
+        জাতীয়তা
+       </div>
+       <div class="info-value" id="detail-nationality">
+        --
+       </div>
+      </div>
+      <div class="info-item">
+       <div class="info-label font-bengali">
+        জন্ম নিবন্ধন
+       </div>
+       <div class="info-value" id="detail-birth-reg">
+        --
+       </div>
+      </div>
+     </div>
+     <hr class="my-6">
+     <h4 class="font-bold text-gray-900 mb-4 font-bengali">অভিভাবকের তথ্য</h4>
+     <div class="grid grid-cols-1 gap-4 mb-6">
+      <div class="info-item">
+       <div class="info-label font-bengali">
+        পিতার নাম
+       </div>
+       <div class="info-value" id="detail-father-name">
+        --
+       </div>
+      </div>
+      <div class="info-item">
+       <div class="info-label font-bengali">
+        পিতার মোবাইল
+       </div>
+       <div class="info-value" id="detail-father-mobile">
+        --
+       </div>
+      </div>
+      <div class="info-item">
+       <div class="info-label font-bengali">
+        মাতার নাম
+       </div>
+       <div class="info-value" id="detail-mother-name">
+        --
+       </div>
+      </div>
+      <div class="info-item">
+       <div class="info-label font-bengali">
+        মাতার মোবাইল
+       </div>
+       <div class="info-value" id="detail-mother-mobile">
+        --
+       </div>
+      </div>
+     </div>
+     <hr class="my-6">
+     <h4 class="font-bold text-gray-900 mb-4 font-bengali">ঠিকানা</h4>
+     <div class="grid grid-cols-1 gap-4">
+      <div class="info-item">
+       <div class="info-label font-bengali">
+        বর্তমান ঠিকানা
+       </div>
+       <div class="info-value text-sm" id="detail-current-address">
+        --
+       </div>
+      </div>
+      <div class="info-item">
+       <div class="info-label font-bengali">
+        স্থায়ী ঠিকানা
+       </div>
+       <div class="info-value text-sm" id="detail-permanent-address">
+        --
+       </div>
+      </div>
+     </div>
+    </div>
+    <div class="modal-footer"><button onclick="closeDetailsModal()" class="btn btn-secondary"> <span class="font-bengali">বন্ধ করুন</span> </button>
+    </div>
+   </div>
+  </div><!-- Delete Confirmation Modal -->
+  <div id="delete-modal" class="modal hidden">
+   <div class="modal-content">
+    <div class="modal-header">
+     <h2 class="font-bengali">শিক্ষার্থী মুছে ফেলুন</h2><button onclick="closeDeleteModal()" style="background: none; border: none; color: white; font-size: 24px; cursor: pointer;">×</button>
+    </div>
+    <div class="modal-body">
+     <p class="text-gray-700 font-bengali mb-4">আপনি কি এই শিক্ষার্থীকে সিস্টেম থেকে মুছে ফেলতে চান?</p>
+     <div class="confirmation-text font-bengali">
+      ⚠️ এই পদক্ষেপটি অপরিবর্তনীয়। এই শিক্ষার্থীর সমস্ত ডাটা স্থায়ীভাবে মুছে যাবে।
+     </div>
+     <p class="text-gray-600 font-bengali mt-4">শিক্ষার্থী: <span id="delete-student-name" class="font-bold"></span></p>
+    </div>
+    <div class="modal-footer"><button onclick="closeDeleteModal()" class="btn btn-secondary"> <span class="font-bengali">বাতিল করুন</span> </button> <button onclick="confirmDelete()" class="btn btn-danger">
+      <svg class="w-4 h-4" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+      </svg><span class="font-bengali">মুছে ফেলুন</span> </button>
+    </div>
+   </div>
+  </div><!-- Toast Container -->
+  <div id="toast-container"></div>
+  <script>
+    // Configuration
+    const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzjKmYDf65gSAm1WKCpYhxNLjhak-rw4rLJtuwji2HXIiV_1nrxtTThACwtgEp9dLRv/exec';
+    
+    // State
+    let allStudents = [];
+    let filteredStudents = [];
+    let currentDeleteStudent = null;
+    
+    const defaultConfig = {
+      institution_name_bn: 'দারুল মোস্তফা সাঃ ইসলামী একাডেমি',
+      institution_name_en: 'Darul Mustafa (SAW) Islamic Academy',
+      dashboard_title: 'শিক্ষার্থী ব্যবস্থাপনা ড্যাশবোর্ড'
+    };
+    
+    // Element SDK Handler
+    const elementHandler = {
+      defaultConfig,
+      async onConfigChange(config) {
+        document.getElementById('header-institution-bn').textContent = 
+          config.institution_name_bn || defaultConfig.institution_name_bn;
+        document.getElementById('header-institution-en').textContent = 
+          config.institution_name_en || defaultConfig.institution_name_en;
+      },
+      mapToCapabilities(config) {
+        return {
+          recolorables: [{
+            get: () => '#0d6e3f',
+            set: (value) => { if(window.elementSdk) window.elementSdk.setConfig({ primary_color: value }); }
+          }],
+          borderables: [],
+          fontEditable: undefined,
+          fontSizeable: undefined
+        };
+      },
+      mapToEditPanelValues(config) {
+        return new Map([
+          ['institution_name_bn', config.institution_name_bn || defaultConfig.institution_name_bn],
+          ['institution_name_en', config.institution_name_en || defaultConfig.institution_name_en],
+          ['dashboard_title', config.dashboard_title || defaultConfig.dashboard_title]
+        ]);
+      }
+    };
+    
+    if (window.elementSdk) {
+      window.elementSdk.init(elementHandler);
+    }
+    
+    // Initialize
+    document.getElementById('header-institution-bn').textContent = defaultConfig.institution_name_bn;
+    document.getElementById('header-institution-en').textContent = defaultConfig.institution_name_en;
+    
+    // Toast Notification
+    function showToast(message, type = 'info') {
+      const container = document.getElementById('toast-container');
+      const toast = document.createElement('div');
+      toast.className = `toast toast-${type}`;
+      toast.textContent = message;
+      container.appendChild(toast);
+      
+      setTimeout(() => {
+        toast.remove();
+      }, 4000);
+    }
+    
+    // Load Students from Google Sheets
+    async function loadStudents() {
+      if (!SCRIPT_URL || SCRIPT_URL === 'YOUR_GOOGLE_APPS_SCRIPT_WEB_APP_URL_HERE') {
+        showToast('Google Apps Script URL এখনো সেট করা হয়নি', 'error');
+        document.getElementById('loading-state').classList.add('hidden');
+        document.getElementById('error-state').classList.remove('hidden');
+        document.getElementById('error-message').textContent = 'প্রশাসনের সাথে যোগাযোগ করুন: Google Apps Script URL সেট করতে হবে।';
+        return;
+      }
+      
+      try {
+        const response = await fetch(`${SCRIPT_URL}?action=getAllStudents`);
+        const data = await response.json();
+        
+        if (!data.success) {
+          throw new Error(data.message || 'Failed to load students');
+        }
+        
+        allStudents = data.students || [];
+        filteredStudents = [...allStudents];
+        
+        // Populate class filter
+        const classes = [...new Set(allStudents.map(s => s.class))].sort();
+        const classFilter = document.getElementById('class-filter');
+        classes.forEach(cls => {
+          const option = document.createElement('option');
+          option.value = cls;
+          option.textContent = cls;
+          classFilter.appendChild(option);
+        });
+        
+        renderStudents();
+        document.getElementById('loading-state').classList.add('hidden');
+        
+        showToast(`${allStudents.length} শিক্ষার্থী সফলভাবে লোড হয়েছে`, 'success');
+        
+      } catch (error) {
+        console.error('Error loading students:', error);
+        document.getElementById('loading-state').classList.add('hidden');
+        document.getElementById('error-state').classList.remove('hidden');
+        document.getElementById('error-message').textContent = error.message;
+        showToast('শিক্ষার্থী লোড করতে ব্যর্থ হয়েছে', 'error');
+      }
+    }
+    
+    // Render Students
+    function renderStudents() {
+      const container = document.getElementById('students-container');
+      container.innerHTML = '';
+      
+      if (filteredStudents.length === 0) {
+        document.getElementById('students-container').classList.add('hidden');
+        document.getElementById('empty-state').classList.remove('hidden');
+        return;
+      }
+      
+      document.getElementById('empty-state').classList.add('hidden');
+      document.getElementById('students-container').classList.remove('hidden');
+      
+      filteredStudents.forEach(student => {
+        const card = createStudentCard(student);
+        container.appendChild(card);
+      });
+    }
+    
+    // Create Student Card
+    function createStudentCard(student) {
+      const card = document.createElement('div');
+      card.className = 'student-card';
+      
+      const photoUrl = student.photo || '';
+      const photoHtml = photoUrl 
+        ? `<img src="${photoUrl}" alt="${student.name}" class="w-full h-40 object-cover" loading="lazy" onerror="this.style.display='none'">`
+        : `<div class="w-full h-40 bg-gradient-to-br from-gray-200 to-gray-300 flex items-center justify-center text-4xl">👤</div>`;
+      
+      card.innerHTML = `
+        <div class="overflow-hidden">
+          ${photoHtml}
+        </div>
+        <div class="p-4">
+          <h3 class="font-bold text-lg text-gray-900 font-bengali mb-1">${student.name}</h3>
+          <p class="text-sm text-gray-600 mb-4">
+            <span class="font-bengali">ID:</span> 
+            <span class="font-english font-bold text-emerald-700">${String(student.id).padStart(5, '0')}</span>
+          </p>
+          
+          <div class="space-y-2 mb-4">
+            <div class="flex justify-between items-start">
+              <span class="text-sm text-gray-600 font-bengali">শ্রেণী:</span>
+              <span class="font-bold text-gray-900">${student.class}</span>
+            </div>
+            <div class="flex justify-between items-start">
+              <span class="text-sm text-gray-600 font-bengali">ইউজারনেম:</span>
+              <span class="text-sm font-english text-gray-900">${student.username}</span>
+            </div>
+          </div>
+          
+          <div class="flex gap-2">
+            <button onclick="openDetailsModal(${JSON.stringify(student).replace(/"/g, '&quot;')})" class="icon-btn icon-btn-view" title="View Details">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /> <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" /></svg>
+            </button>
+            <button onclick="redirectToEditStudent('${student.id}')" class="icon-btn icon-btn-edit" title="Edit">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" /></svg>
+            </button>
+            <button onclick="openDeleteModal(${JSON.stringify(student).replace(/"/g, '&quot;')})" class="icon-btn icon-btn-delete" title="Delete">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>
+            </button>
+          </div>
+        </div>
+      `;
+      
+      return card;
+    }
+    
+    // Filter Students
+    function filterStudents() {
+      const searchTerm = document.getElementById('search-input').value.toLowerCase();
+      const classFilter = document.getElementById('class-filter').value;
+      
+      filteredStudents = allStudents.filter(student => {
+        const matchesSearch = student.name.toLowerCase().includes(searchTerm) || 
+                            String(student.id).includes(searchTerm);
+        const matchesClass = !classFilter || student.class === classFilter;
+        return matchesSearch && matchesClass;
+      });
+      
+      updateActiveFilters();
+      renderStudents();
+    }
+    
+    // Update Active Filters Display
+    function updateActiveFilters() {
+      const container = document.getElementById('active-filters');
+      container.innerHTML = '';
+      
+      const searchTerm = document.getElementById('search-input').value;
+      const classFilter = document.getElementById('class-filter').value;
+      
+      if (searchTerm) {
+        const chip = document.createElement('div');
+        chip.className = 'filter-chip active';
+        chip.innerHTML = `<span class="font-bengali">অনুসন্ধান:</span> <span>${searchTerm}</span>`;
+        container.appendChild(chip);
+      }
+      
+      if (classFilter) {
+        const chip = document.createElement('div');
+        chip.className = 'filter-chip active';
+        chip.innerHTML = `<span class="font-bengali">শ্রেণী:</span> <span>${classFilter}</span>`;
+        container.appendChild(chip);
+      }
+    }
+    
+    // Clear Filters
+    function clearFilters() {
+      document.getElementById('search-input').value = '';
+      document.getElementById('class-filter').value = '';
+      filterStudents();
+    }
+    
+    // Open Details Modal
+    function openDetailsModal(student) {
+      document.getElementById('detail-photo').src = student.photo || '';
+      document.getElementById('detail-name-bn').textContent = student.name || '-';
+      document.getElementById('detail-name-en').textContent = student.name_en || '-';
+      document.getElementById('detail-id').textContent = String(student.id).padStart(5, '0');
+      document.getElementById('detail-class').textContent = student.class || '-';
+      document.getElementById('detail-username').textContent = student.username || '-';
+      document.getElementById('detail-dob').textContent = student.dob || '-';
+      document.getElementById('detail-gender').textContent = student.gender || '-';
+      document.getElementById('detail-nationality').textContent = student.nationality || '-';
+      document.getElementById('detail-birth-reg').textContent = student.birth_reg || '-';
+      document.getElementById('detail-father-name').textContent = student.father_name || '-';
+      document.getElementById('detail-father-mobile').textContent = student.father_mobile || '-';
+      document.getElementById('detail-mother-name').textContent = student.mother_name || '-';
+      document.getElementById('detail-mother-mobile').textContent = student.mother_mobile || '-';
+      
+      const currentAddr = [student.current_village, student.current_po, student.current_upazila, student.current_district]
+        .filter(x => x && x !== '-')
+        .join(', ') || '-';
+      const permAddr = [student.permanent_village, student.permanent_po, student.permanent_upazila, student.permanent_district]
+        .filter(x => x && x !== '-')
+        .join(', ') || '-';
+      
+      document.getElementById('detail-current-address').textContent = currentAddr;
+      document.getElementById('detail-permanent-address').textContent = permAddr;
+      
+      document.getElementById('details-modal').classList.remove('hidden');
+    }
+    
+    function closeDetailsModal() {
+      document.getElementById('details-modal').classList.add('hidden');
+    }
+    
+    // Open Delete Modal
+    function openDeleteModal(student) {
+      currentDeleteStudent = student;
+      document.getElementById('delete-student-name').textContent = student.name;
+      document.getElementById('delete-modal').classList.remove('hidden');
+    }
+    
+    function closeDeleteModal() {
+      document.getElementById('delete-modal').classList.add('hidden');
+      currentDeleteStudent = null;
+    }
+    
+    // Confirm Delete
+    async function confirmDelete() {
+      if (!currentDeleteStudent) return;
+      
+      try {
+        const response = await fetch(SCRIPT_URL, {
+          method: 'POST',
+          body: JSON.stringify({
+            action: 'deleteStudent',
+            studentId: currentDeleteStudent.id
+          })
+        });
+        
+        const data = await response.json();
+        
+        if (data.success) {
+          allStudents = allStudents.filter(s => s.id !== currentDeleteStudent.id);
+          filterStudents();
+          closeDeleteModal();
+          showToast('শিক্ষার্থী সফলভাবে মুছে ফেলা হয়েছে', 'success');
+        } else {
+          showToast('মুছতে ব্যর্থ হয়েছে: ' + (data.message || 'Unknown error'), 'error');
+        }
+      } catch (error) {
+        console.error('Delete error:', error);
+        showToast('মুছতে ব্যর্থ হয়েছে', 'error');
+      }
+    }
+    
+    // Redirect to Add Student
+    function redirectToAddStudent() {
+      window.location.href = 'admform.html';
+    }
+    
+    // Redirect to Edit Student
+    function redirectToEditStudent(studentId) {
+      window.location.href = `admform.html?edit=${studentId}`;
+    }
+    
+    // Load students on page load
+    window.addEventListener('load', () => {
+      loadStudents();
+    });
+  </script>
+ <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9d273e1882f44b02',t:'MTc3MTg1NTE1NC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>

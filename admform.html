@@ -1,0 +1,961 @@
+<!doctype html>
+<html lang="bn" class="h-full">
+ <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ভর্তি ফরম | Admission Form - দারুল মোস্তফা সাঃ ইসলামী একাডেমি</title>
+  <script src="https://cdn.tailwindcss.com/3.4.17"></script>
+  <script src="/_sdk/element_sdk.js"></script>
+  <script src="/_sdk/data_sdk.js"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@300;400;500;600;700&amp;family=Poppins:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary-green: #0d6e3f;
+      --secondary-gold: #c9a227;
+      --dark-text: #1a1a2e;
+      --light-bg: #f8f9fa;
+      --card-bg: #ffffff;
+    }
+    
+    * {
+      font-family: 'Hind Siliguri', 'Poppins', sans-serif;
+    }
+    
+    .font-bengali {
+      font-family: 'Hind Siliguri', sans-serif;
+    }
+    
+    .font-english {
+      font-family: 'Poppins', sans-serif;
+    }
+    
+    .form-section {
+      background: linear-gradient(135deg, #ffffff 0%, #f8fdf9 100%);
+      border-left: 4px solid var(--primary-green);
+    }
+    
+    .input-field {
+      transition: all 0.3s ease;
+      border: 1px solid #e2e8f0;
+    }
+    
+    .input-field:focus {
+      border-color: var(--primary-green);
+      box-shadow: 0 0 0 3px rgba(13, 110, 63, 0.1);
+    }
+    
+    .required-star {
+      color: #dc2626;
+    }
+    
+    .step-indicator {
+      transition: all 0.3s ease;
+    }
+    
+    .step-indicator.active {
+      background: var(--primary-green);
+      color: white;
+    }
+    
+    .step-indicator.completed {
+      background: var(--secondary-gold);
+      color: white;
+    }
+    
+    .photo-upload-zone {
+      border: 2px dashed #cbd5e1;
+      transition: all 0.3s ease;
+    }
+    
+    .photo-upload-zone:hover {
+      border-color: var(--primary-green);
+      background: rgba(13, 110, 63, 0.05);
+    }
+    
+    .photo-upload-zone.has-photo {
+      border-style: solid;
+      border-color: var(--primary-green);
+    }
+    
+    @media print {
+      body {
+        background: white !important;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+      }
+      
+      .no-print {
+        display: none !important;
+      }
+      
+      .print-only {
+        display: block !important;
+      }
+      
+      .print-voucher {
+        box-shadow: none !important;
+        border: 2px solid #000 !important;
+        page-break-inside: avoid;
+      }
+      
+      .print-header {
+        background: linear-gradient(135deg, #0d6e3f 0%, #1a8f5c 100%) !important;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+      }
+      
+      .print-table td, .print-table th {
+        border: 1px solid #000 !important;
+        padding: 8px !important;
+      }
+      
+      .print-photo {
+        width: 120px !important;
+        height: 150px !important;
+        border: 2px solid #000 !important;
+      }
+    }
+    
+    .loading-spinner {
+      border: 3px solid #f3f3f3;
+      border-top: 3px solid var(--primary-green);
+      border-radius: 50%;
+      width: 24px;
+      height: 24px;
+      animation: spin 1s linear infinite;
+    }
+    
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+    
+    .toast {
+      animation: slideIn 0.3s ease;
+    }
+    
+    @keyframes slideIn {
+      from {
+        transform: translateY(-100%);
+        opacity: 0;
+      }
+      to {
+        transform: translateY(0);
+        opacity: 1;
+      }
+    }
+  </style>
+  <style>body { box-sizing: border-box; }</style>
+ </head>
+ <body class="h-full bg-gradient-to-br from-emerald-50 via-white to-amber-50">
+  <div id="app" class="h-full overflow-auto"><!-- Toast Container -->
+   <div id="toast-container" class="fixed top-4 right-4 z-50"></div><!-- Main Form Container -->
+   <div id="form-container" class="max-w-5xl mx-auto p-4 md:p-6"><!-- Header -->
+    <header class="bg-gradient-to-r from-emerald-800 via-emerald-700 to-emerald-800 rounded-t-2xl p-6 text-white shadow-xl">
+     <div class="flex flex-col md:flex-row items-center gap-4"><!-- Logo SVG -->
+      <div class="w-24 h-24 bg-white rounded-full flex items-center justify-center shadow-lg">
+       <svg viewbox="0 0 100 100" class="w-20 h-20"><circle cx="50" cy="50" r="45" fill="#0d6e3f" stroke="#c9a227" stroke-width="3" /> <path d="M50 15 L50 35 M50 65 L50 85" stroke="#c9a227" stroke-width="2" /> <circle cx="50" cy="50" r="20" fill="none" stroke="#c9a227" stroke-width="2" /> <text x="50" y="55" text-anchor="middle" fill="#ffffff" font-size="12" font-weight="bold">
+         دم
+        </text> <path d="M30 50 Q50 30 70 50 Q50 70 30 50" fill="none" stroke="#c9a227" stroke-width="1.5" />
+       </svg>
+      </div>
+      <div class="text-center md:text-left flex-1">
+       <h1 class="text-2xl md:text-3xl font-bold font-bengali" id="header-title">দারুল মোস্তফা সাঃ ইসলামী একাডেমি</h1>
+       <p class="text-emerald-100 font-english text-sm md:text-base">Darul Mustafa (SAW) Islamic Academy</p>
+       <p class="text-emerald-200 text-sm mt-1 font-bengali">পাথর পাড়া, বাইতুল মামুর জামে মসজিদ সংলগ্ন, মছজিদ্দা, সীতাকুণ্ড, চট্টগ্রাম</p>
+       <p class="text-amber-300 text-sm font-bengali">স্থাপিতঃ ২০২৫</p>
+      </div>
+      <div class="text-center bg-white/10 px-4 py-2 rounded-lg">
+       <p class="text-amber-300 font-bold text-lg font-bengali">ভর্তি ফরম</p>
+       <p class="text-emerald-100 text-sm font-english">Admission Form</p>
+      </div>
+     </div>
+    </header><!-- Form Number & Date -->
+    <div class="bg-amber-50 border-b border-amber-200 px-6 py-3 flex flex-wrap justify-between items-center gap-2">
+     <div class="flex items-center gap-2"><span class="font-bengali text-emerald-800">ফরম নম্বর:</span> <span id="form-number" class="font-bold text-emerald-700 bg-white px-3 py-1 rounded">001</span>
+     </div>
+     <div class="flex items-center gap-2"><span class="font-bengali text-emerald-800">তারিখ:</span> <input type="date" id="submission-date" class="input-field px-3 py-1 rounded text-sm" required>
+     </div>
+    </div><!-- Step Indicators -->
+    <div class="bg-white px-6 py-4 border-b flex flex-wrap justify-center gap-2 no-print"><button onclick="goToStep(1)" class="step-indicator active px-4 py-2 rounded-full text-sm font-medium" data-step="1"> ১. মৌলিক তথ্য </button> <button onclick="goToStep(2)" class="step-indicator px-4 py-2 rounded-full text-sm font-medium bg-gray-200" data-step="2"> ২. অভিভাবক </button> <button onclick="goToStep(3)" class="step-indicator px-4 py-2 rounded-full text-sm font-medium bg-gray-200" data-step="3"> ৩. ঠিকানা </button> <button onclick="goToStep(4)" class="step-indicator px-4 py-2 rounded-full text-sm font-medium bg-gray-200" data-step="4"> ৪. শিক্ষা তথ্য </button> <button onclick="goToStep(5)" class="step-indicator px-4 py-2 rounded-full text-sm font-medium bg-gray-200" data-step="5"> ৫. অফিস </button>
+    </div><!-- Form Body -->
+    <form id="admission-form" class="bg-white rounded-b-2xl shadow-xl overflow-hidden"><!-- Step 1: Basic Info -->
+     <div id="step-1" class="form-step p-6">
+      <div class="form-section rounded-xl p-5 mb-6">
+       <h2 class="text-lg font-bold text-emerald-800 mb-4 font-bengali flex items-center gap-2"><span class="w-8 h-8 bg-emerald-700 text-white rounded-full flex items-center justify-center text-sm">১</span> শিক্ষার্থীর মৌলিক তথ্য | Basic Information</h2>
+       <div class="grid grid-cols-1 md:grid-cols-3 gap-4"><!-- Photo Upload -->
+        <div class="md:row-span-3"><label class="block text-sm font-medium text-gray-700 mb-2 font-bengali"> ছবি <span class="required-star">*</span> | Photo </label>
+         <div id="photo-upload-zone" class="photo-upload-zone rounded-xl p-4 text-center cursor-pointer h-48 flex flex-col items-center justify-center" onclick="document.getElementById('photo-input').click()">
+          <div id="photo-preview-container" class="hidden w-full h-full"><img id="photo-preview" class="w-full h-full object-cover rounded-lg" alt="Student Photo">
+          </div>
+          <div id="photo-placeholder" class="text-gray-400">
+           <svg class="w-12 h-12 mx-auto mb-2" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+           </svg>
+           <p class="text-sm font-bengali">ছবি আপলোড করুন</p>
+           <p class="text-xs text-gray-400">Click to upload</p>
+          </div>
+         </div><input type="file" id="photo-input" accept="image/*" class="hidden" onchange="handlePhotoUpload(event)">
+        </div><!-- Student Name Bengali -->
+        <div><label class="block text-sm font-medium text-gray-700 mb-1 font-bengali"> শিক্ষার্থীর নাম (বাংলায়) </label> <input type="text" id="student-name-bn" class="input-field w-full px-4 py-2 rounded-lg font-bengali" placeholder="বাংলায় নাম লিখুন">
+        </div><!-- Student Name English -->
+        <div><label class="block text-sm font-medium text-gray-700 mb-1 font-english"> Student Name (English) </label> <input type="text" id="student-name-en" class="input-field w-full px-4 py-2 rounded-lg font-english" placeholder="Name in English">
+        </div><!-- Date of Birth -->
+        <div><label class="block text-sm font-medium text-gray-700 mb-1 font-bengali"> জন্ম তারিখ <span class="required-star">*</span> </label> <input type="date" id="date-of-birth" class="input-field w-full px-4 py-2 rounded-lg" required>
+        </div><!-- Birth Registration -->
+        <div><label class="block text-sm font-medium text-gray-700 mb-1 font-bengali"> জন্ম নিবন্ধন নম্বর </label> <input type="text" id="birth-reg-no" class="input-field w-full px-4 py-2 rounded-lg" placeholder="Birth Registration No">
+        </div><!-- Gender -->
+        <div><label class="block text-sm font-medium text-gray-700 mb-1 font-bengali"> লিঙ্গ <span class="required-star">*</span> </label> <select id="gender" class="input-field w-full px-4 py-2 rounded-lg" required> <option value="">-- নির্বাচন করুন --</option> <option value="male">পুরুষ | Male</option> <option value="female">মহিলা | Female</option> </select>
+        </div><!-- Religion -->
+        <div><label class="block text-sm font-medium text-gray-700 mb-1 font-bengali"> ধর্ম </label> <input type="text" id="religion" class="input-field w-full px-4 py-2 rounded-lg" value="ইসলাম" readonly>
+        </div><!-- Nationality -->
+        <div><label class="block text-sm font-medium text-gray-700 mb-1 font-bengali"> জাতীয়তা </label> <input type="text" id="nationality" class="input-field w-full px-4 py-2 rounded-lg" value="বাংলাদেশী" readonly>
+        </div>
+       </div>
+      </div>
+      <div class="flex justify-end"><button type="button" onclick="nextStep()" class="bg-emerald-700 hover:bg-emerald-800 text-white px-8 py-3 rounded-lg font-medium transition-all flex items-center gap-2"> পরবর্তী 
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+        </svg></button>
+      </div>
+     </div><!-- Step 2: Parents Info -->
+     <div id="step-2" class="form-step p-6 hidden"><!-- Father's Details -->
+      <div class="form-section rounded-xl p-5 mb-6">
+       <h2 class="text-lg font-bold text-emerald-800 mb-4 font-bengali flex items-center gap-2"><span class="w-8 h-8 bg-emerald-700 text-white rounded-full flex items-center justify-center text-sm">২</span> পিতার তথ্য | Father's Details</h2>
+       <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div><label class="block text-sm font-medium text-gray-700 mb-1 font-bengali">পিতার নাম (বাংলায়)</label> <input type="text" id="father-name-bn" class="input-field w-full px-4 py-2 rounded-lg font-bengali" placeholder="বাংলায় নাম">
+        </div>
+        <div><label class="block text-sm font-medium text-gray-700 mb-1 font-english">Father's Name (English)</label> <input type="text" id="father-name-en" class="input-field w-full px-4 py-2 rounded-lg font-english" placeholder="Name in English">
+        </div>
+        <div><label class="block text-sm font-medium text-gray-700 mb-1 font-bengali">পেশা | Occupation</label> <input type="text" id="father-occupation" class="input-field w-full px-4 py-2 rounded-lg" placeholder="Occupation">
+        </div>
+        <div><label class="block text-sm font-medium text-gray-700 mb-1 font-bengali">মোবাইল নম্বর <span class="required-star">*</span></label> <input type="tel" id="father-mobile" class="input-field w-full px-4 py-2 rounded-lg" placeholder="01XXXXXXXXX" required>
+        </div>
+        <div><label class="block text-sm font-medium text-gray-700 mb-1 font-bengali">জাতীয় পরিচয়পত্র নম্বর</label> <input type="text" id="father-nid" class="input-field w-full px-4 py-2 rounded-lg" placeholder="NID Number">
+        </div>
+        <div><label class="block text-sm font-medium text-gray-700 mb-1 font-bengali">জন্ম তারিখ (NID অনুযায়ী)</label> <input type="date" id="father-dob" class="input-field w-full px-4 py-2 rounded-lg">
+        </div>
+       </div>
+      </div><!-- Mother's Details -->
+      <div class="form-section rounded-xl p-5 mb-6">
+       <h2 class="text-lg font-bold text-emerald-800 mb-4 font-bengali flex items-center gap-2"><span class="w-8 h-8 bg-amber-600 text-white rounded-full flex items-center justify-center text-sm">৩</span> মাতার তথ্য | Mother's Details</h2>
+       <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div><label class="block text-sm font-medium text-gray-700 mb-1 font-bengali">মাতার নাম (বাংলায়)</label> <input type="text" id="mother-name-bn" class="input-field w-full px-4 py-2 rounded-lg font-bengali" placeholder="বাংলায় নাম">
+        </div>
+        <div><label class="block text-sm font-medium text-gray-700 mb-1 font-english">Mother's Name (English)</label> <input type="text" id="mother-name-en" class="input-field w-full px-4 py-2 rounded-lg font-english" placeholder="Name in English">
+        </div>
+        <div><label class="block text-sm font-medium text-gray-700 mb-1 font-bengali">পেশা | Occupation</label> <input type="text" id="mother-occupation" class="input-field w-full px-4 py-2 rounded-lg" placeholder="Occupation">
+        </div>
+        <div><label class="block text-sm font-medium text-gray-700 mb-1 font-bengali">মোবাইল নম্বর <span class="required-star">*</span></label> <input type="tel" id="mother-mobile" class="input-field w-full px-4 py-2 rounded-lg" placeholder="01XXXXXXXXX" required>
+        </div>
+        <div><label class="block text-sm font-medium text-gray-700 mb-1 font-bengali">জাতীয় পরিচয়পত্র নম্বর</label> <input type="text" id="mother-nid" class="input-field w-full px-4 py-2 rounded-lg" placeholder="NID Number">
+        </div>
+        <div><label class="block text-sm font-medium text-gray-700 mb-1 font-bengali">জন্ম তারিখ (NID অনুযায়ী)</label> <input type="date" id="mother-dob" class="input-field w-full px-4 py-2 rounded-lg">
+        </div>
+       </div>
+      </div><!-- Guardian Details -->
+      <div class="form-section rounded-xl p-5 mb-6 bg-amber-50/50">
+       <h2 class="text-lg font-bold text-amber-800 mb-4 font-bengali flex items-center gap-2"><span class="w-8 h-8 bg-amber-600 text-white rounded-full flex items-center justify-center text-sm">⚡</span> অভিভাবকের তথ্য (পিতার অনুপস্থিতিতে) | Guardian Info</h2>
+       <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div><label class="block text-sm font-medium text-gray-700 mb-1 font-bengali">অভিভাবকের নাম</label> <input type="text" id="guardian-name" class="input-field w-full px-4 py-2 rounded-lg" placeholder="Guardian Name">
+        </div>
+        <div><label class="block text-sm font-medium text-gray-700 mb-1 font-bengali">সম্পর্ক | Relation</label> <select id="guardian-relation" class="input-field w-full px-4 py-2 rounded-lg"> <option value="">-- নির্বাচন করুন --</option> <option value="uncle">চাচা/মামা | Uncle</option> <option value="grandfather">দাদা/নানা | Grandfather</option> <option value="brother">ভাই | Brother</option> <option value="other">অন্যান্য | Other</option> </select>
+        </div>
+        <div><label class="block text-sm font-medium text-gray-700 mb-1 font-bengali">পেশা</label> <input type="text" id="guardian-occupation" class="input-field w-full px-4 py-2 rounded-lg" placeholder="Occupation">
+        </div>
+        <div><label class="block text-sm font-medium text-gray-700 mb-1 font-bengali">জাতীয় পরিচয়পত্র নম্বর</label> <input type="text" id="guardian-nid" class="input-field w-full px-4 py-2 rounded-lg" placeholder="NID Number">
+        </div>
+        <div><label class="block text-sm font-medium text-gray-700 mb-1 font-bengali">জন্ম তারিখ</label> <input type="date" id="guardian-dob" class="input-field w-full px-4 py-2 rounded-lg">
+        </div>
+        <div><label class="block text-sm font-medium text-gray-700 mb-1 font-bengali">মোবাইল নম্বর</label> <input type="tel" id="guardian-mobile" class="input-field w-full px-4 py-2 rounded-lg" placeholder="01XXXXXXXXX">
+        </div>
+       </div>
+      </div>
+      <div class="flex justify-between"><button type="button" onclick="prevStep()" class="bg-gray-500 hover:bg-gray-600 text-white px-8 py-3 rounded-lg font-medium transition-all flex items-center gap-2">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+        </svg> পূর্ববর্তী </button> <button type="button" onclick="nextStep()" class="bg-emerald-700 hover:bg-emerald-800 text-white px-8 py-3 rounded-lg font-medium transition-all flex items-center gap-2"> পরবর্তী 
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+        </svg></button>
+      </div>
+     </div><!-- Step 3: Address -->
+     <div id="step-3" class="form-step p-6 hidden"><!-- Permanent Address -->
+      <div class="form-section rounded-xl p-5 mb-6">
+       <h2 class="text-lg font-bold text-emerald-800 mb-4 font-bengali flex items-center gap-2"><span class="w-8 h-8 bg-emerald-700 text-white rounded-full flex items-center justify-center text-sm">📍</span> স্থায়ী ঠিকানা | Permanent Address</h2>
+       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+        <div><label class="block text-sm font-medium text-gray-700 mb-1 font-bengali">গ্রাম/মহল্লা</label> <input type="text" id="permanent-village" class="input-field w-full px-4 py-2 rounded-lg" placeholder="Village/Mohalla">
+        </div>
+        <div><label class="block text-sm font-medium text-gray-700 mb-1 font-bengali">ডাকঘর</label> <input type="text" id="permanent-po" class="input-field w-full px-4 py-2 rounded-lg" placeholder="Post Office">
+        </div>
+        <div><label class="block text-sm font-medium text-gray-700 mb-1 font-bengali">উপজেলা</label> <input type="text" id="permanent-upazila" class="input-field w-full px-4 py-2 rounded-lg" placeholder="Upazila">
+        </div>
+        <div><label class="block text-sm font-medium text-gray-700 mb-1 font-bengali">জেলা</label> <input type="text" id="permanent-district" class="input-field w-full px-4 py-2 rounded-lg" placeholder="District">
+        </div>
+       </div>
+      </div><!-- Current Address -->
+      <div class="form-section rounded-xl p-5 mb-6">
+       <div class="flex items-center justify-between mb-4">
+        <h2 class="text-lg font-bold text-emerald-800 font-bengali flex items-center gap-2"><span class="w-8 h-8 bg-amber-600 text-white rounded-full flex items-center justify-center text-sm">🏠</span> বর্তমান ঠিকানা | Current Address</h2><label class="flex items-center gap-2 text-sm cursor-pointer"> <input type="checkbox" id="same-as-permanent" onchange="copyPermanentAddress()" class="w-4 h-4 text-emerald-600 rounded"> <span class="font-bengali">স্থায়ী ঠিকানার অনুরূপ</span> </label>
+       </div>
+       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+        <div><label class="block text-sm font-medium text-gray-700 mb-1 font-bengali">গ্রাম/মহল্লা</label> <input type="text" id="current-village" class="input-field w-full px-4 py-2 rounded-lg" placeholder="Village/Mohalla">
+        </div>
+        <div><label class="block text-sm font-medium text-gray-700 mb-1 font-bengali">ডাকঘর</label> <input type="text" id="current-po" class="input-field w-full px-4 py-2 rounded-lg" placeholder="Post Office">
+        </div>
+        <div><label class="block text-sm font-medium text-gray-700 mb-1 font-bengali">উপজেলা</label> <input type="text" id="current-upazila" class="input-field w-full px-4 py-2 rounded-lg" placeholder="Upazila">
+        </div>
+        <div><label class="block text-sm font-medium text-gray-700 mb-1 font-bengali">জেলা</label> <input type="text" id="current-district" class="input-field w-full px-4 py-2 rounded-lg" placeholder="District">
+        </div>
+       </div>
+      </div>
+      <div class="flex justify-between"><button type="button" onclick="prevStep()" class="bg-gray-500 hover:bg-gray-600 text-white px-8 py-3 rounded-lg font-medium transition-all flex items-center gap-2">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+        </svg> পূর্ববর্তী </button> <button type="button" onclick="nextStep()" class="bg-emerald-700 hover:bg-emerald-800 text-white px-8 py-3 rounded-lg font-medium transition-all flex items-center gap-2"> পরবর্তী 
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+        </svg></button>
+      </div>
+     </div><!-- Step 4: Academic Info -->
+     <div id="step-4" class="form-step p-6 hidden"><!-- Previous School -->
+      <div class="form-section rounded-xl p-5 mb-6">
+       <h2 class="text-lg font-bold text-emerald-800 mb-4 font-bengali flex items-center gap-2"><span class="w-8 h-8 bg-emerald-700 text-white rounded-full flex items-center justify-center text-sm">📚</span> পূর্ববর্তী শিক্ষা প্রতিষ্ঠানের তথ্য | Previous Academic Record</h2>
+       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        <div class="md:col-span-2"><label class="block text-sm font-medium text-gray-700 mb-1 font-bengali">প্রতিষ্ঠানের নাম</label> <input type="text" id="prev-school-name" class="input-field w-full px-4 py-2 rounded-lg" placeholder="School/Madrasa Name">
+        </div>
+        <div><label class="block text-sm font-medium text-gray-700 mb-1 font-bengali">ঠিকানা</label> <input type="text" id="prev-school-address" class="input-field w-full px-4 py-2 rounded-lg" placeholder="Address">
+        </div>
+        <div><label class="block text-sm font-medium text-gray-700 mb-1 font-bengali">শ্রেণী | Class</label> <input type="text" id="prev-class" class="input-field w-full px-4 py-2 rounded-lg" placeholder="Last Class">
+        </div>
+        <div><label class="block text-sm font-medium text-gray-700 mb-1 font-bengali">রোল নম্বর</label> <input type="text" id="prev-roll" class="input-field w-full px-4 py-2 rounded-lg" placeholder="Roll Number">
+        </div>
+        <div><label class="block text-sm font-medium text-gray-700 mb-1 font-bengali">TC নম্বর</label> <input type="text" id="tc-no" class="input-field w-full px-4 py-2 rounded-lg" placeholder="Transfer Certificate No">
+        </div>
+       </div>
+      </div><!-- Additional Info -->
+      <div class="form-section rounded-xl p-5 mb-6">
+       <h2 class="text-lg font-bold text-emerald-800 mb-4 font-bengali flex items-center gap-2"><span class="w-8 h-8 bg-amber-600 text-white rounded-full flex items-center justify-center text-sm">📱</span> অতিরিক্ত তথ্য | Additional Information</h2>
+       <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div><label class="block text-sm font-medium text-gray-700 mb-1 font-bengali">হোয়াটসঅ্যাপ নম্বর</label> <input type="tel" id="whatsapp-number" class="input-field w-full px-4 py-2 rounded-lg" placeholder="WhatsApp Number">
+        </div>
+        <div><label class="block text-sm font-medium text-gray-700 mb-1 font-bengali">এই প্রতিষ্ঠানে ভাই/বোন আছে?</label> <select id="siblings-in-school" class="input-field w-full px-4 py-2 rounded-lg"> <option value="no">না | No</option> <option value="yes">হ্যাঁ | Yes</option> </select>
+        </div>
+       </div>
+      </div>
+      <div class="flex justify-between"><button type="button" onclick="prevStep()" class="bg-gray-500 hover:bg-gray-600 text-white px-8 py-3 rounded-lg font-medium transition-all flex items-center gap-2">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+        </svg> পূর্ববর্তী </button> <button type="button" onclick="nextStep()" class="bg-emerald-700 hover:bg-emerald-800 text-white px-8 py-3 rounded-lg font-medium transition-all flex items-center gap-2"> পরবর্তী 
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+        </svg></button>
+      </div>
+     </div><!-- Step 5: Office Use -->
+     <div id="step-5" class="form-step p-6 hidden">
+      <div class="form-section rounded-xl p-5 mb-6 bg-gradient-to-r from-amber-50 to-emerald-50">
+       <h2 class="text-lg font-bold text-emerald-800 mb-4 font-bengali flex items-center gap-2"><span class="w-8 h-8 bg-gradient-to-r from-emerald-700 to-amber-600 text-white rounded-full flex items-center justify-center text-sm">🏫</span> অফিস ব্যবহারের জন্য | For Office Use Only</h2>
+       <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div><label class="block text-sm font-medium text-gray-700 mb-1 font-bengali">ভর্তিকৃত শ্রেণী</label> <select id="admitted-class" class="input-field w-full px-4 py-2 rounded-lg"> <option value="">-- নির্বাচন করুন --</option> <option value="নাজেরা">নাজেরা</option> <option value="হিফজ">হিফজ</option> <option value="১ম শ্রেণী">১ম শ্রেণী</option> <option value="২য় শ্রেণী">২য় শ্রেণী</option> <option value="৩য় শ্রেণী">৩য় শ্রেণী</option> <option value="৪র্থ শ্রেণী">৪র্থ শ্রেণী</option> <option value="৫ম শ্রেণী">৫ম শ্রেণী</option> </select>
+        </div>
+        <div><label class="block text-sm font-medium text-gray-700 mb-1 font-bengali">শাখা/বিভাগ</label> <input type="text" id="section" class="input-field w-full px-4 py-2 rounded-lg" placeholder="Section/Department">
+        </div>
+        <div><label class="block text-sm font-medium text-gray-700 mb-1 font-bengali">রোল নম্বর</label> <input type="text" id="assigned-roll" class="input-field w-full px-4 py-2 rounded-lg" placeholder="Assigned Roll No">
+        </div>
+       </div>
+      </div><!-- Declaration -->
+      <div class="bg-gray-50 rounded-xl p-5 mb-6 border-2 border-dashed border-gray-300"><label class="flex items-start gap-3 cursor-pointer"> <input type="checkbox" id="declaration" class="w-5 h-5 text-emerald-600 rounded mt-1" required> <span class="text-sm text-gray-700 font-bengali leading-relaxed"> আমি ঘোষণা করছি যে, উপরে প্রদত্ত সমস্ত তথ্য আমার জানামতে সত্য ও সঠিক। আমি প্রতিষ্ঠানের সকল নিয়ম-কানুন মেনে চলতে সম্মত আছি। <br><span class="text-gray-500 font-english text-xs">I declare that all information provided above is true and correct to the best of my knowledge. I agree to abide by all rules and regulations of the institution.</span> </span> </label>
+      </div>
+      <div class="flex justify-between"><button type="button" onclick="prevStep()" class="bg-gray-500 hover:bg-gray-600 text-white px-8 py-3 rounded-lg font-medium transition-all flex items-center gap-2">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+        </svg> পূর্ববর্তী </button> <button type="submit" id="submit-btn" class="bg-gradient-to-r from-emerald-700 to-emerald-600 hover:from-emerald-800 hover:to-emerald-700 text-white px-10 py-3 rounded-lg font-bold transition-all flex items-center gap-2 shadow-lg"> <span id="submit-text">ফরম জমা দিন</span>
+        <div id="submit-spinner" class="loading-spinner hidden"></div>
+        <svg id="submit-icon" class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+        </svg></button>
+      </div>
+     </div>
+    </form>
+   </div><!-- Print Voucher (Hidden until submission) -->
+   <div id="print-voucher-container" class="hidden">
+    <div class="max-w-4xl mx-auto p-4 no-print"><button onclick="window.print()" class="bg-emerald-700 hover:bg-emerald-800 text-white px-6 py-3 rounded-lg font-medium mb-4 flex items-center gap-2">
+      <svg class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z" />
+      </svg> প্রিন্ট করুন | Print Form </button> <button onclick="showNewForm()" class="bg-amber-600 hover:bg-amber-700 text-white px-6 py-3 rounded-lg font-medium mb-4 ml-2"> নতুন ফরম | New Form </button>
+    </div>
+    <div id="print-voucher" class="print-voucher bg-white max-w-4xl mx-auto shadow-2xl rounded-xl overflow-hidden mb-8"><!-- Print Header -->
+     <div class="print-header bg-gradient-to-r from-emerald-800 via-emerald-700 to-emerald-800 p-6 text-white">
+      <div class="flex items-center gap-4">
+       <div class="w-20 h-20 bg-white rounded-full flex items-center justify-center">
+        <svg viewbox="0 0 100 100" class="w-16 h-16"><circle cx="50" cy="50" r="45" fill="#0d6e3f" stroke="#c9a227" stroke-width="3" /> <path d="M50 15 L50 35 M50 65 L50 85" stroke="#c9a227" stroke-width="2" /> <circle cx="50" cy="50" r="20" fill="none" stroke="#c9a227" stroke-width="2" /> <text x="50" y="55" text-anchor="middle" fill="#ffffff" font-size="12" font-weight="bold">
+          دم
+         </text>
+        </svg>
+       </div>
+       <div class="flex-1 text-center">
+        <h1 class="text-2xl font-bold font-bengali">দারুল মোস্তফা সাঃ ইসলামী একাডেমি</h1>
+        <p class="text-emerald-100 text-sm">Darul Mustafa (SAW) Islamic Academy</p>
+        <p class="text-emerald-200 text-xs mt-1">পাথর পাড়া, বাইতুল মামুর জামে মসজিদ সংলগ্ন, মছজিদ্দা, সীতাকুণ্ড, চট্টগ্রাম</p>
+       </div>
+       <div class="text-center bg-white/20 px-4 py-2 rounded-lg">
+        <p class="text-amber-300 font-bold">ভর্তি রশিদ</p>
+        <p class="text-xs">Admission Voucher</p>
+       </div>
+      </div>
+     </div><!-- Voucher Body -->
+     <div class="p-6">
+      <div class="flex justify-between items-start mb-6">
+       <div>
+        <p class="text-sm"><span class="font-bold">ফরম নম্বর:</span> <span id="voucher-form-no" class="text-emerald-700 font-bold">001</span></p>
+        <p class="text-sm"><span class="font-bold">তারিখ:</span> <span id="voucher-date"></span></p>
+       </div>
+       <div id="voucher-photo" class="print-photo w-28 h-36 border-2 border-gray-300 rounded-lg overflow-hidden bg-gray-100 flex items-center justify-center"><span class="text-gray-400 text-xs text-center">Photo</span>
+       </div>
+      </div><!-- Student Info Table -->
+      <table class="print-table w-full border-collapse mb-4 text-sm">
+       <thead>
+        <tr class="bg-emerald-700 text-white">
+         <th colspan="4" class="p-2 text-left font-bengali">শিক্ষার্থীর তথ্য | Student Information</th>
+        </tr>
+       </thead>
+       <tbody>
+        <tr>
+         <td class="p-2 font-bold bg-gray-50 w-1/4">নাম (বাংলা)</td>
+         <td class="p-2" id="v-student-name-bn"></td>
+         <td class="p-2 font-bold bg-gray-50 w-1/4">Name (English)</td>
+         <td class="p-2" id="v-student-name-en"></td>
+        </tr>
+        <tr>
+         <td class="p-2 font-bold bg-gray-50">জন্ম তারিখ</td>
+         <td class="p-2" id="v-dob"></td>
+         <td class="p-2 font-bold bg-gray-50">লিঙ্গ</td>
+         <td class="p-2" id="v-gender"></td>
+        </tr>
+        <tr>
+         <td class="p-2 font-bold bg-gray-50">জন্ম নিবন্ধন</td>
+         <td class="p-2" id="v-birth-reg"></td>
+         <td class="p-2 font-bold bg-gray-50">জাতীয়তা</td>
+         <td class="p-2" id="v-nationality"></td>
+        </tr>
+       </tbody>
+      </table><!-- Parents Info Table -->
+      <table class="print-table w-full border-collapse mb-4 text-sm">
+       <thead>
+        <tr class="bg-amber-600 text-white">
+         <th colspan="4" class="p-2 text-left font-bengali">অভিভাবকের তথ্য | Parents Information</th>
+        </tr>
+       </thead>
+       <tbody>
+        <tr>
+         <td class="p-2 font-bold bg-gray-50 w-1/4">পিতার নাম</td>
+         <td class="p-2" id="v-father-name"></td>
+         <td class="p-2 font-bold bg-gray-50 w-1/4">মোবাইল</td>
+         <td class="p-2" id="v-father-mobile"></td>
+        </tr>
+        <tr>
+         <td class="p-2 font-bold bg-gray-50">মাতার নাম</td>
+         <td class="p-2" id="v-mother-name"></td>
+         <td class="p-2 font-bold bg-gray-50">মোবাইল</td>
+         <td class="p-2" id="v-mother-mobile"></td>
+        </tr>
+       </tbody>
+      </table><!-- Address Table -->
+      <table class="print-table w-full border-collapse mb-4 text-sm">
+       <thead>
+        <tr class="bg-emerald-600 text-white">
+         <th colspan="2" class="p-2 text-left font-bengali">ঠিকানা | Address</th>
+        </tr>
+       </thead>
+       <tbody>
+        <tr>
+         <td class="p-2 font-bold bg-gray-50 w-1/4">স্থায়ী ঠিকানা</td>
+         <td class="p-2" id="v-permanent-address"></td>
+        </tr>
+        <tr>
+         <td class="p-2 font-bold bg-gray-50">বর্তমান ঠিকানা</td>
+         <td class="p-2" id="v-current-address"></td>
+        </tr>
+       </tbody>
+      </table><!-- Admission Info Table -->
+      <table class="print-table w-full border-collapse mb-6 text-sm">
+       <thead>
+        <tr class="bg-gradient-to-r from-emerald-700 to-amber-600 text-white">
+         <th colspan="4" class="p-2 text-left font-bengali">ভর্তি সংক্রান্ত তথ্য | Admission Details</th>
+        </tr>
+       </thead>
+       <tbody>
+        <tr>
+         <td class="p-2 font-bold bg-gray-50 w-1/4">ভর্তিকৃত শ্রেণী</td>
+         <td class="p-2 font-bold text-emerald-700" id="v-admitted-class"></td>
+         <td class="p-2 font-bold bg-gray-50 w-1/4">শাখা</td>
+         <td class="p-2" id="v-section"></td>
+        </tr>
+        <tr>
+         <td class="p-2 font-bold bg-gray-50">রোল নম্বর</td>
+         <td class="p-2 font-bold text-amber-600" id="v-roll"></td>
+         <td class="p-2 font-bold bg-gray-50">হোয়াটসঅ্যাপ</td>
+         <td class="p-2" id="v-whatsapp"></td>
+        </tr>
+       </tbody>
+      </table><!-- Signatures -->
+      <div class="grid grid-cols-3 gap-4 mt-8 pt-4 border-t-2 border-dashed border-gray-300">
+       <div class="text-center">
+        <div class="h-16 border-b-2 border-gray-400 mb-2"></div>
+        <p class="text-sm font-bold font-bengali">অভিভাবকের স্বাক্ষর</p>
+        <p class="text-xs text-gray-500">Guardian's Signature</p>
+       </div>
+       <div class="text-center">
+        <div class="h-16 border-b-2 border-gray-400 mb-2"></div>
+        <p class="text-sm font-bold font-bengali">শ্রেণী শিক্ষক</p>
+        <p class="text-xs text-gray-500">Class Teacher</p>
+       </div>
+       <div class="text-center">
+        <div class="h-16 border-b-2 border-gray-400 mb-2"></div>
+        <p class="text-sm font-bold font-bengali">অধ্যক্ষ</p>
+        <p class="text-xs text-gray-500">Principal</p>
+       </div>
+      </div><!-- Footer -->
+      <div class="mt-6 pt-4 border-t text-center text-xs text-gray-500">
+       <p class="font-bengali">এই রশিদটি সংরক্ষণ করুন। ভর্তির সময় এটি প্রদর্শন করতে হবে।</p>
+       <p>Please keep this voucher safe. It must be presented at the time of admission.</p>
+      </div>
+     </div>
+    </div>
+   </div>
+  </div>
+  <script>
+    // Configuration
+    const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwFNkJ4UU9DHmu8dDwGgST-Xu1kA6ZlTLiHfRclL3fYUR0f62hB_oe9HzFiYCFH0ulY/exec';
+    
+    // State
+    let currentStep = 1;
+    const totalSteps = 5;
+    let photoData = '';
+    let formData = [];
+    let nextFormNumber = 1;
+    
+    // Default Config
+    const defaultConfig = {
+      institution_name: 'দারুল মোস্তফা সাঃ ইসলামী একাডেমি',
+      primary_color: '#0d6e3f',
+      secondary_color: '#c9a227',
+      text_color: '#1a1a2e',
+      background_color: '#f8f9fa',
+      card_color: '#ffffff'
+    };
+    
+    // Data Handler for SDK
+    const dataHandler = {
+      onDataChanged(data) {
+        formData = data;
+        if (data.length > 0) {
+          const maxFormNumber = Math.max(...data.map(d => d.form_number || 0));
+          nextFormNumber = maxFormNumber + 1;
+        } else {
+          nextFormNumber = 1;
+        }
+        updateFormNumber();
+      }
+    };
+    
+    // Element SDK Handler
+    const elementHandler = {
+      defaultConfig,
+      async onConfigChange(config) {
+        const title = document.getElementById('header-title');
+        if (title) {
+          title.textContent = config.institution_name || defaultConfig.institution_name;
+        }
+        document.documentElement.style.setProperty('--primary-green', config.primary_color || defaultConfig.primary_color);
+        document.documentElement.style.setProperty('--secondary-gold', config.secondary_color || defaultConfig.secondary_color);
+      },
+      mapToCapabilities(config) {
+        return {
+          recolorables: [
+            {
+              get: () => config.background_color || defaultConfig.background_color,
+              set: (value) => { config.background_color = value; if(window.elementSdk) window.elementSdk.setConfig({ background_color: value }); }
+            },
+            {
+              get: () => config.card_color || defaultConfig.card_color,
+              set: (value) => { config.card_color = value; if(window.elementSdk) window.elementSdk.setConfig({ card_color: value }); }
+            },
+            {
+              get: () => config.text_color || defaultConfig.text_color,
+              set: (value) => { config.text_color = value; if(window.elementSdk) window.elementSdk.setConfig({ text_color: value }); }
+            },
+            {
+              get: () => config.primary_color || defaultConfig.primary_color,
+              set: (value) => { config.primary_color = value; if(window.elementSdk) window.elementSdk.setConfig({ primary_color: value }); }
+            },
+            {
+              get: () => config.secondary_color || defaultConfig.secondary_color,
+              set: (value) => { config.secondary_color = value; if(window.elementSdk) window.elementSdk.setConfig({ secondary_color: value }); }
+            }
+          ],
+          borderables: [],
+          fontEditable: undefined,
+          fontSizeable: undefined
+        };
+      },
+      mapToEditPanelValues(config) {
+        return new Map([
+          ['institution_name', config.institution_name || defaultConfig.institution_name]
+        ]);
+      }
+    };
+    
+    // Initialize
+    async function init() {
+      // Initialize Element SDK
+      if (window.elementSdk) {
+        window.elementSdk.init(elementHandler);
+      }
+      
+      // Initialize Data SDK
+      if (window.dataSdk) {
+        const result = await window.dataSdk.init(dataHandler);
+        if (!result.isOk) {
+          console.error('Failed to initialize data SDK');
+        }
+      }
+      
+      // Set today's date
+      const today = new Date().toISOString().split('T')[0];
+      document.getElementById('submission-date').value = today;
+      
+      // Setup form submission
+      document.getElementById('admission-form').addEventListener('submit', handleSubmit);
+      
+      updateFormNumber();
+    }
+    
+    function updateFormNumber() {
+      const formNumberEl = document.getElementById('form-number');
+      if (formNumberEl) {
+        formNumberEl.textContent = String(nextFormNumber).padStart(3, '0');
+      }
+    }
+    
+    // Step Navigation
+    function goToStep(step) {
+      if (step < 1 || step > totalSteps) return;
+      
+      // Hide all steps
+      document.querySelectorAll('.form-step').forEach(el => el.classList.add('hidden'));
+      
+      // Show target step
+      document.getElementById(`step-${step}`).classList.remove('hidden');
+      
+      // Update indicators
+      document.querySelectorAll('.step-indicator').forEach((el, index) => {
+        el.classList.remove('active', 'completed');
+        if (index + 1 < step) {
+          el.classList.add('completed');
+        } else if (index + 1 === step) {
+          el.classList.add('active');
+        }
+      });
+      
+      currentStep = step;
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+    
+    function nextStep() {
+      if (currentStep < totalSteps) {
+        goToStep(currentStep + 1);
+      }
+    }
+    
+    function prevStep() {
+      if (currentStep > 1) {
+        goToStep(currentStep - 1);
+      }
+    }
+    
+    // Photo Upload
+    function handlePhotoUpload(event) {
+      const file = event.target.files[0];
+      if (!file) return;
+      
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        photoData = e.target.result;
+        
+        const preview = document.getElementById('photo-preview');
+        const previewContainer = document.getElementById('photo-preview-container');
+        const placeholder = document.getElementById('photo-placeholder');
+        const uploadZone = document.getElementById('photo-upload-zone');
+        
+        preview.src = photoData;
+        previewContainer.classList.remove('hidden');
+        placeholder.classList.add('hidden');
+        uploadZone.classList.add('has-photo');
+      };
+      reader.readAsDataURL(file);
+    }
+    
+    // Copy Address
+    function copyPermanentAddress() {
+      const checkbox = document.getElementById('same-as-permanent');
+      if (checkbox.checked) {
+        document.getElementById('current-village').value = document.getElementById('permanent-village').value;
+        document.getElementById('current-po').value = document.getElementById('permanent-po').value;
+        document.getElementById('current-upazila').value = document.getElementById('permanent-upazila').value;
+        document.getElementById('current-district').value = document.getElementById('permanent-district').value;
+      }
+    }
+    
+    // Toast Notification
+    function showToast(message, type = 'success') {
+      const container = document.getElementById('toast-container');
+      const toast = document.createElement('div');
+      toast.className = `toast px-6 py-4 rounded-lg shadow-lg mb-2 ${type === 'success' ? 'bg-emerald-600' : 'bg-red-600'} text-white font-medium`;
+      toast.textContent = message;
+      container.appendChild(toast);
+      
+      setTimeout(() => {
+        toast.remove();
+      }, 4000);
+    }
+    
+    // Validation
+    function validateForm() {
+      const requiredFields = [
+        { id: 'submission-date', name: 'তারিখ' },
+        { id: 'date-of-birth', name: 'জন্ম তারিখ' },
+        { id: 'gender', name: 'লিঙ্গ' },
+        { id: 'father-mobile', name: 'পিতার মোবাইল' },
+        { id: 'mother-mobile', name: 'মাতার মোবাইল' }
+      ];
+      
+      const missingFields = [];
+      
+      // Check photo
+      if (!photoData) {
+        missingFields.push('ছবি');
+      }
+      
+      requiredFields.forEach(field => {
+        const el = document.getElementById(field.id);
+        if (!el.value.trim()) {
+          missingFields.push(field.name);
+        }
+      });
+      
+      // Check declaration
+      if (!document.getElementById('declaration').checked) {
+        missingFields.push('ঘোষণা');
+      }
+      
+      if (missingFields.length > 0) {
+        showToast(`অনুগ্রহ করে পূরণ করুন: ${missingFields.join(', ')}`, 'error');
+        return false;
+      }
+      
+      return true;
+    }
+    
+    // Form Submission
+    async function handleSubmit(e) {
+      e.preventDefault();
+      
+      if (!validateForm()) return;
+      
+      // Check data limit
+      if (formData.length >= 999) {
+        showToast('সর্বোচ্চ ৯৯৯টি ফরম জমা দেওয়া হয়েছে। অনুগ্রহ করে প্রশাসনের সাথে যোগাযোগ করুন।', 'error');
+        return;
+      }
+      
+      const submitBtn = document.getElementById('submit-btn');
+      const submitText = document.getElementById('submit-text');
+      const submitSpinner = document.getElementById('submit-spinner');
+      const submitIcon = document.getElementById('submit-icon');
+      
+      // Show loading
+      submitBtn.disabled = true;
+      submitText.textContent = 'জমা হচ্ছে...';
+      submitSpinner.classList.remove('hidden');
+      submitIcon.classList.add('hidden');
+      
+      const formDataObj = {
+        form_number: nextFormNumber,
+        submission_date: document.getElementById('submission-date').value,
+        student_name_bn: document.getElementById('student-name-bn').value,
+        student_name_en: document.getElementById('student-name-en').value,
+        date_of_birth: document.getElementById('date-of-birth').value,
+        birth_reg_no: document.getElementById('birth-reg-no').value,
+        gender: document.getElementById('gender').value,
+        religion: document.getElementById('religion').value,
+        nationality: document.getElementById('nationality').value,
+        father_name_bn: document.getElementById('father-name-bn').value,
+        father_name_en: document.getElementById('father-name-en').value,
+        father_occupation: document.getElementById('father-occupation').value,
+        father_mobile: document.getElementById('father-mobile').value,
+        father_nid: document.getElementById('father-nid').value,
+        father_dob: document.getElementById('father-dob').value,
+        mother_name_bn: document.getElementById('mother-name-bn').value,
+        mother_name_en: document.getElementById('mother-name-en').value,
+        mother_occupation: document.getElementById('mother-occupation').value,
+        mother_mobile: document.getElementById('mother-mobile').value,
+        mother_nid: document.getElementById('mother-nid').value,
+        mother_dob: document.getElementById('mother-dob').value,
+        permanent_village: document.getElementById('permanent-village').value,
+        permanent_po: document.getElementById('permanent-po').value,
+        permanent_upazila: document.getElementById('permanent-upazila').value,
+        permanent_district: document.getElementById('permanent-district').value,
+        current_village: document.getElementById('current-village').value,
+        current_po: document.getElementById('current-po').value,
+        current_upazila: document.getElementById('current-upazila').value,
+        current_district: document.getElementById('current-district').value,
+        guardian_name: document.getElementById('guardian-name').value,
+        guardian_relation: document.getElementById('guardian-relation').value,
+        guardian_occupation: document.getElementById('guardian-occupation').value,
+        guardian_nid: document.getElementById('guardian-nid').value,
+        guardian_dob: document.getElementById('guardian-dob').value,
+        guardian_mobile: document.getElementById('guardian-mobile').value,
+        prev_school_name: document.getElementById('prev-school-name').value,
+        prev_school_address: document.getElementById('prev-school-address').value,
+        prev_class: document.getElementById('prev-class').value,
+        prev_roll: document.getElementById('prev-roll').value,
+        tc_no: document.getElementById('tc-no').value,
+        whatsapp_number: document.getElementById('whatsapp-number').value,
+        siblings_in_school: document.getElementById('siblings-in-school').value,
+        admitted_class: document.getElementById('admitted-class').value,
+        section: document.getElementById('section').value,
+        assigned_roll: document.getElementById('assigned-roll').value,
+        photo_data: photoData ? photoData : '',
+        status: 'Submitted'
+      };
+      
+      try {
+        // Save to Data SDK
+        if (window.dataSdk) {
+          const result = await window.dataSdk.create(formDataObj);
+          if (!result.isOk) {
+            throw new Error('Failed to save data');
+          }
+        }
+        
+        // Try to send to Google Sheets (optional)
+        if (SCRIPT_URL !== 'YOUR_APPS_SCRIPT_URL_HERE') {
+          try {
+            await fetch(SCRIPT_URL, {
+              method: 'POST',
+              mode: 'no-cors',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify(formDataObj)
+            });
+          } catch (err) {
+            console.log('Google Sheets sync skipped');
+          }
+        }
+        
+        // Save to localStorage as backup
+        const localData = JSON.parse(localStorage.getItem('admissionForms') || '[]');
+        localData.push({ ...formDataObj, photo_data: photoData, timestamp: new Date().toISOString() });
+        localStorage.setItem('admissionForms', JSON.stringify(localData));
+        
+        showToast('ফরম সফলভাবে জমা হয়েছে!', 'success');
+        
+        // Show voucher
+        populateVoucher(formDataObj);
+        
+      } catch (error) {
+        showToast('ফরম জমা দিতে সমস্যা হয়েছে। আবার চেষ্টা করুন।', 'error');
+        
+        // Reset button
+        submitBtn.disabled = false;
+        submitText.textContent = 'ফরম জমা দিন';
+        submitSpinner.classList.add('hidden');
+        submitIcon.classList.remove('hidden');
+      }
+    }
+    
+    // Populate Voucher
+    function populateVoucher(data) {
+      document.getElementById('voucher-form-no').textContent = String(data.form_number).padStart(3, '0');
+      document.getElementById('voucher-date').textContent = formatDate(data.submission_date);
+      
+      document.getElementById('v-student-name-bn').textContent = data.student_name_bn || '-';
+      document.getElementById('v-student-name-en').textContent = data.student_name_en || '-';
+      document.getElementById('v-dob').textContent = formatDate(data.date_of_birth);
+      document.getElementById('v-gender').textContent = data.gender === 'male' ? 'পুরুষ' : 'মহিলা';
+      document.getElementById('v-birth-reg').textContent = data.birth_reg_no || '-';
+      document.getElementById('v-nationality').textContent = data.nationality;
+      
+      document.getElementById('v-father-name').textContent = `${data.father_name_bn || '-'} (${data.father_name_en || '-'})`;
+      document.getElementById('v-father-mobile').textContent = data.father_mobile || '-';
+      document.getElementById('v-mother-name').textContent = `${data.mother_name_bn || '-'} (${data.mother_name_en || '-'})`;
+      document.getElementById('v-mother-mobile').textContent = data.mother_mobile || '-';
+      
+      const permAddr = [data.permanent_village, data.permanent_po, data.permanent_upazila, data.permanent_district].filter(Boolean).join(', ');
+      const currAddr = [data.current_village, data.current_po, data.current_upazila, data.current_district].filter(Boolean).join(', ');
+      document.getElementById('v-permanent-address').textContent = permAddr || '-';
+      document.getElementById('v-current-address').textContent = currAddr || '-';
+      
+      document.getElementById('v-admitted-class').textContent = data.admitted_class || 'নির্ধারিত হয়নি';
+      document.getElementById('v-section').textContent = data.section || '-';
+      document.getElementById('v-roll').textContent = data.assigned_roll || 'নির্ধারিত হয়নি';
+      document.getElementById('v-whatsapp').textContent = data.whatsapp_number || '-';
+      
+      // Photo
+      const photoContainer = document.getElementById('voucher-photo');
+      if (photoData) {
+        photoContainer.innerHTML = `<img src="${photoData}" class="w-full h-full object-cover" alt="Student Photo">`;
+      }
+      
+      // Show voucher, hide form
+      document.getElementById('form-container').classList.add('hidden');
+      document.getElementById('print-voucher-container').classList.remove('hidden');
+      
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+    
+    // Format Date
+    function formatDate(dateStr) {
+      if (!dateStr) return '-';
+      const date = new Date(dateStr);
+      return date.toLocaleDateString('bn-BD', { year: 'numeric', month: 'long', day: 'numeric' });
+    }
+    
+    // Show New Form
+    function showNewForm() {
+      document.getElementById('form-container').classList.remove('hidden');
+      document.getElementById('print-voucher-container').classList.add('hidden');
+      
+      // Reset form
+      document.getElementById('admission-form').reset();
+      photoData = '';
+      
+      // Reset photo preview
+      const preview = document.getElementById('photo-preview');
+      const previewContainer = document.getElementById('photo-preview-container');
+      const placeholder = document.getElementById('photo-placeholder');
+      const uploadZone = document.getElementById('photo-upload-zone');
+      
+      previewContainer.classList.add('hidden');
+      placeholder.classList.remove('hidden');
+      uploadZone.classList.remove('has-photo');
+      
+      // Reset defaults
+      document.getElementById('religion').value = 'ইসলাম';
+      document.getElementById('nationality').value = 'বাংলাদেশী';
+      document.getElementById('submission-date').value = new Date().toISOString().split('T')[0];
+      
+      // Reset button
+      const submitBtn = document.getElementById('submit-btn');
+      const submitText = document.getElementById('submit-text');
+      const submitSpinner = document.getElementById('submit-spinner');
+      const submitIcon = document.getElementById('submit-icon');
+      
+      submitBtn.disabled = false;
+      submitText.textContent = 'ফরম জমা দিন';
+      submitSpinner.classList.add('hidden');
+      submitIcon.classList.remove('hidden');
+      
+      // Go to step 1
+      goToStep(1);
+      
+      // Update form number
+      updateFormNumber();
+    }
+    
+    // Initialize on load
+    init();
+  </script>
+ <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9ce568a6a4a85807',t:'MTc3MTE2NDgzNy4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
