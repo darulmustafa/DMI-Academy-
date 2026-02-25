@@ -1,93 +1,408 @@
-<!DOCTYPE html>
-<html lang="bn">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>School Dashboard</title>
-
-<!-- Google Fonts -->
-<link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;600;700&family=Poppins:wght@400;600&display=swap" rel="stylesheet">
-
-<!-- Tailwind CSS CDN -->
-<script src="https://cdn.tailwindcss.com"></script>
-
-<style>
-body {
-    font-family: 'Poppins', sans-serif;
-}
-.bengali {
-    font-family: 'Hind Siliguri', sans-serif;
-}
-.glass-card {
-    background: rgba(255, 255, 255, 0.15);
-    backdrop-filter: blur(15px);
-    border: 1px solid rgba(255, 255, 255, 0.3);
-}
-</style>
-</head>
-
-<body class="min-h-screen bg-gradient-to-br from-[#0d6e3f] to-[#c9a227] flex flex-col items-center justify-center p-4">
-
-<!-- Header -->
-<div class="text-center mb-10 animate-fade-in">
-    <div class="w-20 h-20 mx-auto mb-4 bg-white rounded-full flex items-center justify-center shadow-lg">
-        <!-- Logo Placeholder -->
-        <span class="text-2xl font-bold text-[#0d6e3f]">LOGO</span>
+<!doctype html>
+<html lang="bn" class="h-full">
+ <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>স্কুল ম্যানেজমেন্ট | School Management Dashboard - দারুল মোস্তফা সাঃ ইসলামী একাডেমি</title>
+  <script src="https://cdn.tailwindcss.com/3.4.17"></script>
+  <script src="/_sdk/element_sdk.js"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@300;400;500;600;700&amp;family=Poppins:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary-green: #0d6e3f;
+      --secondary-gold: #c9a227;
+      --dark-text: #1a1a2e;
+      --light-bg: #f8f9fa;
+      --card-bg: #ffffff;
+    }
+    
+    * {
+      font-family: 'Hind Siliguri', 'Poppins', sans-serif;
+    }
+    
+    .font-bengali {
+      font-family: 'Hind Siliguri', sans-serif;
+    }
+    
+    .font-english {
+      font-family: 'Poppins', sans-serif;
+    }
+    
+    html, body {
+      height: 100%;
+      margin: 0;
+      padding: 0;
+    }
+    
+    body {
+      background: linear-gradient(135deg, #0d6e3f 0%, #1a8f5c 50%, #c9a227 100%);
+      min-height: 100%;
+      display: flex;
+      flex-direction: column;
+    }
+    
+    #app-wrapper {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+    }
+    
+    .header-section {
+      text-align: center;
+      color: white;
+      padding: 40px 20px 30px;
+      animation: fadeInDown 0.8s ease;
+    }
+    
+    .logo-container {
+      width: 80px;
+      height: 80px;
+      background: white;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 20px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+      animation: scaleIn 0.8s ease 0.2s both;
+    }
+    
+    .logo-svg {
+      width: 64px;
+      height: 64px;
+    }
+    
+    .institution-title {
+      font-size: 1.75rem;
+      font-weight: 700;
+      margin-bottom: 8px;
+      animation: fadeInDown 0.8s ease 0.3s both;
+    }
+    
+    .institution-subtitle {
+      font-size: 1rem;
+      font-weight: 400;
+      opacity: 0.95;
+      margin-bottom: 4px;
+      animation: fadeInDown 0.8s ease 0.4s both;
+    }
+    
+    .institution-address {
+      font-size: 0.9rem;
+      opacity: 0.85;
+      animation: fadeInDown 0.8s ease 0.5s both;
+    }
+    
+    .dashboard-grid {
+      flex: 1;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 24px;
+      padding: 40px 20px;
+      max-width: 1200px;
+      margin: 0 auto;
+      width: 100%;
+    }
+    
+    @media (min-width: 768px) {
+      .dashboard-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 32px;
+        padding: 40px 30px;
+      }
+    }
+    
+    @media (min-width: 1024px) {
+      .dashboard-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 32px;
+      }
+    }
+    
+    .module-card {
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(10px);
+      border-radius: 16px;
+      padding: 28px 24px;
+      text-decoration: none;
+      color: inherit;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      animation: slideUp 0.6s ease both;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .module-card::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      right: -50%;
+      width: 300px;
+      height: 300px;
+      background: radial-gradient(circle, rgba(201, 162, 39, 0.1) 0%, transparent 70%);
+      border-radius: 50%;
+      transition: all 0.3s ease;
+    }
+    
+    .module-card:hover {
+      transform: translateY(-12px) scale(1.02);
+      box-shadow: 0 20px 48px rgba(13, 110, 63, 0.25);
+      background: rgba(255, 255, 255, 0.98);
+    }
+    
+    .module-card:hover::before {
+      transform: scale(1.2);
+    }
+    
+    .module-card-content {
+      position: relative;
+      z-index: 1;
+    }
+    
+    .module-icon {
+      width: 64px;
+      height: 64px;
+      background: linear-gradient(135deg, var(--primary-green) 0%, #1a8f5c 100%);
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 16px;
+      transition: all 0.3s ease;
+    }
+    
+    .module-card:hover .module-icon {
+      transform: rotate(10deg) scale(1.1);
+      box-shadow: 0 8px 20px rgba(13, 110, 63, 0.3);
+    }
+    
+    .module-icon svg {
+      width: 36px;
+      height: 36px;
+      color: white;
+      stroke: white;
+      fill: none;
+      stroke-width: 2;
+    }
+    
+    .module-title {
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: var(--primary-green);
+      margin-bottom: 8px;
+    }
+    
+    .module-description {
+      font-size: 0.9rem;
+      color: #6b7280;
+      margin-bottom: 16px;
+      line-height: 1.5;
+    }
+    
+    .module-cta {
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--secondary-gold);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.3s ease;
+    }
+    
+    .module-card:hover .module-cta {
+      gap: 10px;
+      color: var(--primary-green);
+    }
+    
+    .arrow-icon {
+      width: 16px;
+      height: 16px;
+      transition: transform 0.3s ease;
+    }
+    
+    .module-card:hover .arrow-icon {
+      transform: translateX(4px);
+    }
+    
+    @keyframes fadeInDown {
+      from {
+        opacity: 0;
+        transform: translateY(-30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    
+    @keyframes scaleIn {
+      from {
+        opacity: 0;
+        transform: scale(0.8);
+      }
+      to {
+        opacity: 1;
+        transform: scale(1);
+      }
+    }
+    
+    @keyframes slideUp {
+      from {
+        opacity: 0;
+        transform: translateY(40px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    
+    .module-card:nth-child(1) { animation-delay: 0.1s; }
+    .module-card:nth-child(2) { animation-delay: 0.2s; }
+    .module-card:nth-child(3) { animation-delay: 0.3s; }
+    .module-card:nth-child(4) { animation-delay: 0.4s; }
+  </style>
+  <style>body { box-sizing: border-box; }</style>
+  <script src="/_sdk/data_sdk.js" type="text/javascript"></script>
+ </head>
+ <body class="h-full overflow-auto">
+  <div id="app-wrapper"><!-- Header Section -->
+   <div class="header-section">
+    <div class="logo-container">
+     <svg viewbox="0 0 100 100" class="logo-svg"><circle cx="50" cy="50" r="45" fill="#0d6e3f" stroke="#c9a227" stroke-width="3" /> <path d="M50 15 L50 35 M50 65 L50 85" stroke="#c9a227" stroke-width="2" /> <circle cx="50" cy="50" r="20" fill="none" stroke="#c9a227" stroke-width="2" /> <text x="50" y="55" text-anchor="middle" fill="#ffffff" font-size="12" font-weight="bold">
+       دم
+      </text>
+     </svg>
     </div>
-    <h1 class="text-white text-2xl md:text-3xl font-bold bengali">
-        দারুল মোস্তফা সাঃ ইসলামী একাডেমি
-    </h1>
-    <p class="text-white/80 mt-2">School Management Navigation Panel</p>
-</div>
+    <h1 class="institution-title font-bengali" id="dashboard-title">দারুল মোস্তফা সাঃ ইসলামী একাডেমি</h1>
+    <p class="institution-subtitle font-english" id="dashboard-subtitle">Darul Mustafa (SAW) Islamic Academy</p>
+    <p class="institution-address font-bengali" id="dashboard-address">পাথর পাড়া, সীতাকুণ্ড, চট্টগ্রাম</p>
+   </div><!-- Dashboard Grid -->
+   <div class="dashboard-grid"><!-- New Student Add --> <a href="admform.html" class="module-card" id="new-student-link">
+     <div class="module-card-content">
+      <div class="module-icon">
+       <svg viewbox="0 0 24 24"><path d="M12 5v14M5 12h14" stroke="white" stroke-width="2" stroke-linecap="round" /> <circle cx="12" cy="8" r="3" stroke="white" stroke-width="2" fill="none" /> <path d="M19 19c0-2.21-3.13-4-7-4s-7 1.79-7 4" stroke="white" stroke-width="2" />
+       </svg>
+      </div>
+      <h2 class="module-title font-bengali" id="new-student-title">নতুন শিক্ষার্থী যোগ করুন</h2>
+      <p class="module-description font-english" id="new-student-desc">Add new student admission</p>
+      <div class="module-cta"><span class="font-bengali">এখানে যান</span>
+       <svg class="arrow-icon" viewbox="0 0 24 24" fill="none" stroke="currentColor"><path d="M5 12h14M12 5l7 7-7 7" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+       </svg>
+      </div>
+     </div></a> <!-- Admission Form Download --> <a href="adprint.html" class="module-card" id="download-form-link">
+     <div class="module-card-content">
+      <div class="module-icon">
+       <svg viewbox="0 0 24 24"><path d="M19 9h-4V5H9v4H5l7-7 7 7z" stroke="white" stroke-width="2" fill="none" stroke-linejoin="round" /> <path d="M5 14h14v5a2 2 0 01-2 2H7a2 2 0 01-2-2v-5z" stroke="white" stroke-width="2" fill="none" />
+       </svg>
+      </div>
+      <h2 class="module-title font-bengali" id="download-form-title">ফরম ডাউনলোড করুন</h2>
+      <p class="module-description font-english" id="download-form-desc">Download admission forms</p>
+      <div class="module-cta"><span class="font-bengali">এখানে যান</span>
+       <svg class="arrow-icon" viewbox="0 0 24 24" fill="none" stroke="currentColor"><path d="M5 12h14M12 5l7 7-7 7" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+       </svg>
+      </div>
+     </div></a> <!-- Students Information --> <a href="information.html" class="module-card" id="info-link">
+     <div class="module-card-content">
+      <div class="module-icon">
+       <svg viewbox="0 0 24 24"><circle cx="12" cy="8" r="3" stroke="white" stroke-width="2" fill="none" /> <path d="M19 19c0-2.21-3.13-4-7-4s-7 1.79-7 4" stroke="white" stroke-width="2" /> <circle cx="7" cy="14" r="2.5" stroke="white" stroke-width="2" fill="none" /> <path d="M12 16c1.2 0 2.2-.6 2.8-1.5" stroke="white" stroke-width="2" stroke-linecap="round" /> <circle cx="17" cy="14" r="2.5" stroke="white" stroke-width="2" fill="none" /> <path d="M17 16c1.2 0 2.2-.6 2.8-1.5" stroke="white" stroke-width="2" stroke-linecap="round" />
+       </svg>
+      </div>
+      <h2 class="module-title font-bengali" id="info-title">শিক্ষার্থী তথ্য</h2>
+      <p class="module-description font-english" id="info-desc">View student information</p>
+      <div class="module-cta"><span class="font-bengali">এখানে যান</span>
+       <svg class="arrow-icon" viewbox="0 0 24 24" fill="none" stroke="currentColor"><path d="M5 12h14M12 5l7 7-7 7" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+       </svg>
+      </div>
+     </div></a> <!-- Fee Collection --> <a href="collection.html" class="module-card" id="fee-link">
+     <div class="module-card-content">
+      <div class="module-icon">
+       <svg viewbox="0 0 24 24"><circle cx="12" cy="12" r="7" stroke="white" stroke-width="2" fill="none" /> <path d="M12 9v6M9 12h6" stroke="white" stroke-width="2" stroke-linecap="round" /> <path d="M3 12a9 9 0 1118 0 9 9 0 01-18 0z" stroke="white" stroke-width="2" fill="none" opacity="0.3" />
+       </svg>
+      </div>
+      <h2 class="module-title font-bengali" id="fee-title">ফি সংগ্রহ</h2>
+      <p class="module-description font-english" id="fee-desc">Collect student fees</p>
+      <div class="module-cta"><span class="font-bengali">এখানে যান</span>
+       <svg class="arrow-icon" viewbox="0 0 24 24" fill="none" stroke="currentColor"><path d="M5 12h14M12 5l7 7-7 7" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+       </svg>
+      </div>
+     </div></a>
+   </div>
+  </div>
+  <script>
+    // Default Config
+    const defaultConfig = {
+      institution_name_bn: 'দারুল মোস্তফা সাঃ ইসলামী একাডেমি',
+      institution_name_en: 'Darul Mustafa (SAW) Islamic Academy',
+      institution_address: 'পাথর পাড়া, সীতাকুণ্ড, চট্টগ্রাম',
+      new_student_link: 'admform.html',
+      admission_download_link: 'adprint.html',
+      students_info_link: 'information.html',
+      fee_collection_link: 'collection.html'
+    };
 
-<!-- Grid Section -->
-<div class="grid grid-cols-1 md:grid-cols-2 gap-6 w-full max-w-4xl">
+    // Element SDK Handler
+    const elementHandler = {
+      defaultConfig,
+      async onConfigChange(config) {
+        // Update header text
+        document.getElementById('dashboard-title').textContent = 
+          config.institution_name_bn || defaultConfig.institution_name_bn;
+        document.getElementById('dashboard-subtitle').textContent = 
+          config.institution_name_en || defaultConfig.institution_name_en;
+        document.getElementById('dashboard-address').textContent = 
+          config.institution_address || defaultConfig.institution_address;
 
-    <!-- Card 1 -->
-    <a href="admform.html" class="glass-card rounded-2xl p-8 text-center text-white shadow-xl transition transform hover:scale-105 hover:shadow-2xl duration-300">
-        <div class="mb-4">
-            <!-- User Plus Icon -->
-            <svg xmlns="http://www.w3.org/2000/svg" class="w-12 h-12 mx-auto" fill="none" stroke="currentColor" stroke-width="1.5">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M15 12h3m0 0h3m-3 0v3m0-3V9m-6 6a4 4 0 110-8 4 4 0 010 8zm-7 7a7 7 0 0114 0H3z"/>
-            </svg>
-        </div>
-        <h2 class="text-xl font-semibold bengali">New Student Add</h2>
-    </a>
+        // Update links
+        const newStudentLink = config.new_student_link || defaultConfig.new_student_link;
+        const downloadFormLink = config.admission_download_link || defaultConfig.admission_download_link;
+        const infoLink = config.students_info_link || defaultConfig.students_info_link;
+        const feeLink = config.fee_collection_link || defaultConfig.fee_collection_link;
 
-    <!-- Card 2 -->
-    <a href="adprint.html" class="glass-card rounded-2xl p-8 text-center text-white shadow-xl transition transform hover:scale-105 hover:shadow-2xl duration-300">
-        <div class="mb-4">
-            <!-- Download Icon -->
-            <svg xmlns="http://www.w3.org/2000/svg" class="w-12 h-12 mx-auto" fill="none" stroke="currentColor" stroke-width="1.5">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M4 16v2a2 2 0 002 2h12a2 2 0 002-2v-2M7 10l5 5 5-5M12 15V3"/>
-            </svg>
-        </div>
-        <h2 class="text-xl font-semibold bengali">Admission Form Download</h2>
-    </a>
+        document.getElementById('new-student-link').href = newStudentLink;
+        document.getElementById('download-form-link').href = downloadFormLink;
+        document.getElementById('info-link').href = infoLink;
+        document.getElementById('fee-link').href = feeLink;
+      },
+      mapToCapabilities(config) {
+        return {
+          recolorables: [],
+          borderables: [],
+          fontEditable: undefined,
+          fontSizeable: undefined
+        };
+      },
+      mapToEditPanelValues(config) {
+        return new Map([
+          ['institution_name_bn', config.institution_name_bn || defaultConfig.institution_name_bn],
+          ['institution_name_en', config.institution_name_en || defaultConfig.institution_name_en],
+          ['institution_address', config.institution_address || defaultConfig.institution_address],
+          ['new_student_link', config.new_student_link || defaultConfig.new_student_link],
+          ['admission_download_link', config.admission_download_link || defaultConfig.admission_download_link],
+          ['students_info_link', config.students_info_link || defaultConfig.students_info_link],
+          ['fee_collection_link', config.fee_collection_link || defaultConfig.fee_collection_link]
+        ]);
+      }
+    };
 
-    <!-- Card 3 -->
-    <a href="information.html" class="glass-card rounded-2xl p-8 text-center text-white shadow-xl transition transform hover:scale-105 hover:shadow-2xl duration-300">
-        <div class="mb-4">
-            <!-- Users Icon -->
-            <svg xmlns="http://www.w3.org/2000/svg" class="w-12 h-12 mx-auto" fill="none" stroke="currentColor" stroke-width="1.5">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M17 20h5V8H2v12h5m10 0v-3a4 4 0 00-8 0v3m8 0H7"/>
-            </svg>
-        </div>
-        <h2 class="text-xl font-semibold bengali">Students Information</h2>
-    </a>
+    // Initialize SDK
+    if (window.elementSdk) {
+      window.elementSdk.init(elementHandler);
+    }
 
-    <!-- Card 4 -->
-    <a href="collection.html" class="glass-card rounded-2xl p-8 text-center text-white shadow-xl transition transform hover:scale-105 hover:shadow-2xl duration-300">
-        <div class="mb-4">
-            <!-- Wallet Icon -->
-            <svg xmlns="http://www.w3.org/2000/svg" class="w-12 h-12 mx-auto" fill="none" stroke="currentColor" stroke-width="1.5">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M21 12h-6m0 0a3 3 0 110-6h6v12h-6a3 3 0 010-6zM3 6h12v12H3z"/>
-            </svg>
-        </div>
-        <h2 class="text-xl font-semibold bengali">Students Fee Collection</h2>
-    </a>
-
-</div>
-
-</body>
+    // Set initial values
+    document.getElementById('dashboard-title').textContent = defaultConfig.institution_name_bn;
+    document.getElementById('dashboard-subtitle').textContent = defaultConfig.institution_name_en;
+    document.getElementById('dashboard-address').textContent = defaultConfig.institution_address;
+  </script>
+ <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9d394ff260177cd7',t:'MTc3MjA0NDYyOS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
