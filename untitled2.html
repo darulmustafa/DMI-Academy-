@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>School Dashboard</title>
+
+<!-- Google Fonts -->
+<link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;600;700&family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+
+<!-- Tailwind CSS CDN -->
+<script src="https://cdn.tailwindcss.com"></script>
+
+<style>
+body {
+    font-family: 'Poppins', sans-serif;
+}
+.bengali {
+    font-family: 'Hind Siliguri', sans-serif;
+}
+.glass-card {
+    background: rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(15px);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+}
+</style>
+</head>
+
+<body class="min-h-screen bg-gradient-to-br from-[#0d6e3f] to-[#c9a227] flex flex-col items-center justify-center p-4">
+
+<!-- Header -->
+<div class="text-center mb-10 animate-fade-in">
+    <div class="w-20 h-20 mx-auto mb-4 bg-white rounded-full flex items-center justify-center shadow-lg">
+        <!-- Logo Placeholder -->
+        <span class="text-2xl font-bold text-[#0d6e3f]">LOGO</span>
+    </div>
+    <h1 class="text-white text-2xl md:text-3xl font-bold bengali">
+        দারুল মোস্তফা সাঃ ইসলামী একাডেমি
+    </h1>
+    <p class="text-white/80 mt-2">School Management Navigation Panel</p>
+</div>
+
+<!-- Grid Section -->
+<div class="grid grid-cols-1 md:grid-cols-2 gap-6 w-full max-w-4xl">
+
+    <!-- Card 1 -->
+    <a href="admform.html" class="glass-card rounded-2xl p-8 text-center text-white shadow-xl transition transform hover:scale-105 hover:shadow-2xl duration-300">
+        <div class="mb-4">
+            <!-- User Plus Icon -->
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-12 h-12 mx-auto" fill="none" stroke="currentColor" stroke-width="1.5">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M15 12h3m0 0h3m-3 0v3m0-3V9m-6 6a4 4 0 110-8 4 4 0 010 8zm-7 7a7 7 0 0114 0H3z"/>
+            </svg>
+        </div>
+        <h2 class="text-xl font-semibold bengali">New Student Add</h2>
+    </a>
+
+    <!-- Card 2 -->
+    <a href="adprint.html" class="glass-card rounded-2xl p-8 text-center text-white shadow-xl transition transform hover:scale-105 hover:shadow-2xl duration-300">
+        <div class="mb-4">
+            <!-- Download Icon -->
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-12 h-12 mx-auto" fill="none" stroke="currentColor" stroke-width="1.5">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M4 16v2a2 2 0 002 2h12a2 2 0 002-2v-2M7 10l5 5 5-5M12 15V3"/>
+            </svg>
+        </div>
+        <h2 class="text-xl font-semibold bengali">Admission Form Download</h2>
+    </a>
+
+    <!-- Card 3 -->
+    <a href="information.html" class="glass-card rounded-2xl p-8 text-center text-white shadow-xl transition transform hover:scale-105 hover:shadow-2xl duration-300">
+        <div class="mb-4">
+            <!-- Users Icon -->
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-12 h-12 mx-auto" fill="none" stroke="currentColor" stroke-width="1.5">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M17 20h5V8H2v12h5m10 0v-3a4 4 0 00-8 0v3m8 0H7"/>
+            </svg>
+        </div>
+        <h2 class="text-xl font-semibold bengali">Students Information</h2>
+    </a>
+
+    <!-- Card 4 -->
+    <a href="collection.html" class="glass-card rounded-2xl p-8 text-center text-white shadow-xl transition transform hover:scale-105 hover:shadow-2xl duration-300">
+        <div class="mb-4">
+            <!-- Wallet Icon -->
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-12 h-12 mx-auto" fill="none" stroke="currentColor" stroke-width="1.5">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M21 12h-6m0 0a3 3 0 110-6h6v12h-6a3 3 0 010-6zM3 6h12v12H3z"/>
+            </svg>
+        </div>
+        <h2 class="text-xl font-semibold bengali">Students Fee Collection</h2>
+    </a>
+
+</div>
+
+</body>
+</html>
