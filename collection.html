@@ -551,314 +551,306 @@
     </div>
    </div>
   </div>
-  <script>
-    // Configuration
-    const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxH2ShfW8utheJXWonFOA32QM2aHYqUWr-7zLo-jNhSID1m3wfLYjhatu4yZVlGxgWRbw/exec';
-    
-    // Default Config
-    const defaultConfig = {
-      institution_name_bn: 'দারুল মোস্তফা সাঃ ইসলামী একাডেমি',
-      institution_name_en: 'Darul Mustafa (SAW) Islamic Academy',
-      institution_address: 'পাথর পাড়া, বাইতুল মামুর জামে মসজিদ সংলগ্ন, মছজিদ্দা, সীতাকুণ্ড, চট্টগ্রাম',
-      page_title: 'শিক্ষার্থী ফি সংগ্রহ | Student Fees Collection'
-    };
+<script>
+  // ==============================
+  // Configuration
+  // ==============================
+  const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxH2ShfW8utheJXWonFOA32QM2aHYqUWr-7zLo-jNhSID1m3wfLYjhatu4yZVlGxgWRbw/exec';
 
-    // State Management
-    let currentStudent = null;
-    let currentFees = [];
-    let feeInputs = {};
+  const defaultConfig = {
+    institution_name_bn: 'দারুল মোস্তফা সাঃ ইসলামী একাডেমি',
+    institution_name_en: 'Darul Mustafa (SAW) Islamic Academy',
+    institution_address: 'পাথর পাড়া, বাইতুল মামুর জামে মসজিদ সংলগ্ন, মছজিদ্দা, সীতাকুণ্ড, চট্টগ্রাম',
+    page_title: 'শিক্ষার্থী ফি সংগ্রহ | Student Fees Collection'
+  };
 
-    // Element SDK Handler
-    const elementHandler = {
-      defaultConfig,
-      async onConfigChange(config) {
-        document.getElementById('header-institution-bn').textContent = 
-          config.institution_name_bn || defaultConfig.institution_name_bn;
-        document.getElementById('header-institution-en').textContent = 
-          config.institution_name_en || defaultConfig.institution_name_en;
-        document.getElementById('header-address').textContent = 
-          config.institution_address || defaultConfig.institution_address;
-        document.getElementById('page-title').textContent = 
-          config.page_title || defaultConfig.page_title;
-      },
-      mapToCapabilities(config) {
-        return {
-          recolorables: [],
-          borderables: [],
-          fontEditable: undefined,
-          fontSizeable: undefined
-        };
-      },
-      mapToEditPanelValues(config) {
-        return new Map([
-          ['institution_name_bn', config.institution_name_bn || defaultConfig.institution_name_bn],
-          ['institution_name_en', config.institution_name_en || defaultConfig.institution_name_en],
-          ['institution_address', config.institution_address || defaultConfig.institution_address],
-          ['page_title', config.page_title || defaultConfig.page_title]
-        ]);
-      }
-    };
+  let currentStudent = null;
+  let currentFees = [];
+  let feeInputs = {};
 
-    // Initialize SDK
-    if (window.elementSdk) {
-      window.elementSdk.init(elementHandler);
+  // ==============================
+  // Element SDK Handler
+  // ==============================
+  const elementHandler = {
+    defaultConfig,
+    async onConfigChange(config) {
+      document.getElementById('header-institution-bn').textContent = config.institution_name_bn || defaultConfig.institution_name_bn;
+      document.getElementById('header-institution-en').textContent = config.institution_name_en || defaultConfig.institution_name_en;
+      document.getElementById('header-address').textContent = config.institution_address || defaultConfig.institution_address;
+      document.getElementById('page-title').textContent = config.page_title || defaultConfig.page_title;
+    },
+    mapToCapabilities(config) {
+      return { recolorables: [], borderables: [], fontEditable: undefined, fontSizeable: undefined };
+    },
+    mapToEditPanelValues(config) {
+      return new Map([
+        ['institution_name_bn', config.institution_name_bn || defaultConfig.institution_name_bn],
+        ['institution_name_en', config.institution_name_en || defaultConfig.institution_name_en],
+        ['institution_address', config.institution_address || defaultConfig.institution_address],
+        ['page_title', config.page_title || defaultConfig.page_title]
+      ]);
+    }
+  };
+
+  if (window.elementSdk) window.elementSdk.init(elementHandler);
+
+  // Set initial values
+  document.getElementById('header-institution-bn').textContent = defaultConfig.institution_name_bn;
+  document.getElementById('header-institution-en').textContent = defaultConfig.institution_name_en;
+  document.getElementById('header-address').textContent = defaultConfig.institution_address;
+  document.getElementById('page-title').textContent = defaultConfig.page_title;
+
+  // ==============================
+  // Helper Functions
+  // ==============================
+  function showToast(message, type = 'info') {
+    const container = document.getElementById('toast-container');
+    const toast = document.createElement('div');
+    const bgClass = type === 'success' ? 'bg-emerald-600' : type === 'error' ? 'bg-red-600' : type === 'warning' ? 'bg-amber-600' : 'bg-blue-600';
+    toast.className = `toast ${bgClass} text-white px-6 py-4 rounded-lg shadow-xl mb-3 font-medium font-bengali`;
+    toast.textContent = message;
+    container.appendChild(toast);
+    setTimeout(() => {
+      toast.style.animation = 'slideIn 0.3s ease reverse';
+      setTimeout(() => toast.remove(), 300);
+    }, 4000);
+  }
+
+  function formatCurrency(num) {
+    return '৳ ' + (Math.round(num * 100) / 100).toLocaleString('bn-BD');
+  }
+
+  function parseBengaliNumber(str) {
+    return parseInt(String(str).replace(/[০-৯]/g, d => '০123456789'.indexOf(d))) || 0;
+  }
+
+  // ==============================
+  // Search Student
+  // ==============================
+  async function searchStudent() {
+    const searchInput = document.getElementById('search-id');
+    const searchId = searchInput.value.trim();
+
+    if (!searchId) {
+      showToast('অনুগ্রহ করে শিক্ষার্থী আইডি লিখুন', 'warning');
+      return;
     }
 
-    // Set initial values
-    document.getElementById('header-institution-bn').textContent = defaultConfig.institution_name_bn;
-    document.getElementById('header-institution-en').textContent = defaultConfig.institution_name_en;
-    document.getElementById('header-address').textContent = defaultConfig.institution_address;
-    document.getElementById('page-title').textContent = defaultConfig.page_title;
-
-    // Toast notification
-    function showToast(message, type = 'info') {
-      const container = document.getElementById('toast-container');
-      const toast = document.createElement('div');
-
-      let bgClass = 'bg-blue-600';
-      if (type === 'success') bgClass = 'bg-emerald-600';
-      if (type === 'error') bgClass = 'bg-red-600';
-      if (type === 'warning') bgClass = 'bg-amber-600';
-
-      toast.className = `toast ${bgClass} text-white px-6 py-4 rounded-lg shadow-xl mb-3 font-medium font-bengali`;
-      toast.textContent = message;
-      container.appendChild(toast);
-
-      setTimeout(() => {
-        toast.style.animation = 'slideIn 0.3s ease reverse';
-        setTimeout(() => toast.remove(), 300);
-      }, 4000);
+    if (!SCRIPT_URL || SCRIPT_URL.includes('YOUR_GOOGLE_APPS_SCRIPT_WEB_APP_URL_HERE')) {
+      showToast('Google Apps Script URL এখনো সেট করা হয়নি।', 'error');
+      return;
     }
 
-    // Format number to Bengali with currency
-    function formatCurrency(num) {
-      return '৳ ' + (Math.round(num * 100) / 100).toLocaleString('bn-BD');
-    }
+    // Loading state
+    document.getElementById('empty-state').classList.add('hidden');
+    document.getElementById('error-state').classList.add('hidden');
+    document.getElementById('fees-container').classList.add('hidden');
+    document.getElementById('loading-state').classList.remove('hidden');
 
-    // Parse Bengali number to regular number
-    function parseBengaliNumber(str) {
-      return parseInt(String(str).replace(/[০-৯]/g, d => '০123456789'.indexOf(d))) || 0;
-    }
+    try {
+      const response = await fetch(`${SCRIPT_URL}?action=search&id=${encodeURIComponent(searchId)}`);
+      const data = await response.json();
 
-    // Search Student
-    async function searchStudent() {
-      const searchInput = document.getElementById('search-id');
-      const searchId = searchInput.value.trim();
-
-      if (!searchId) {
-        showToast('অনুগ্রহ করে শিক্ষার্থী আইডি লিখুন', 'warning');
-        return;
-      }
-
-      if (!SCRIPT_URL || SCRIPT_URL === 'YOUR_GOOGLE_APPS_SCRIPT_WEB_APP_URL_HERE') {
-        showToast('Google Apps Script URL এখনো সেট করা হয়নি।', 'error');
-        return;
-      }
-
-      // Show loading state
-      document.getElementById('empty-state').classList.add('hidden');
-      document.getElementById('error-state').classList.add('hidden');
-      document.getElementById('fees-container').classList.add('hidden');
-      document.getElementById('loading-state').classList.remove('hidden');
-
-      try {
-        const response = await fetch(`${SCRIPT_URL}?action=search&id=${encodeURIComponent(searchId)}`);
-        const data = await response.json();
-
-        if (!data.success) {
-          document.getElementById('loading-state').classList.add('hidden');
-          document.getElementById('error-state').classList.remove('hidden');
-          document.getElementById('error-message').textContent = 
-            `"${searchId}" আইডি দিয়ে কোনো শিক্ষার্থী পাওয়া যায়নি।`;
-          showToast('শিক্ষার্থী পাওয়া যায়নি', 'error');
-          return;
-        }
-
-        // Store current student
-        currentStudent = data;
-
-        // Load fees for this class
-        await loadFeesForClass(data.admitted_class);
-
-        // Populate student info
-        document.getElementById('info-student-id').textContent = data.form_id || '-';
-        document.getElementById('info-student-name').textContent = data.student_name_bn || '-';
-        document.getElementById('info-student-class').textContent = data.admitted_class || '-';
-
-        // Show fees container
-        document.getElementById('loading-state').classList.add('hidden');
-        document.getElementById('error-state').classList.add('hidden');
-        document.getElementById('fees-container').classList.remove('hidden');
-
-        showToast('শিক্ষার্থী তথ্য সফলভাবে লোড হয়েছে', 'success');
-
-      } catch (error) {
-        console.error('Search error:', error);
+      if (!data.success) {
         document.getElementById('loading-state').classList.add('hidden');
         document.getElementById('error-state').classList.remove('hidden');
-        document.getElementById('error-message').textContent = 
-          'ডেটা লোড করতে সমস্যা হয়েছে। পরে আবার চেষ্টা করুন।';
-        showToast('সার্ভার ত্রুটি', 'error');
-      }
-    }
-
-    // Load Fees for Class
-    async function loadFeesForClass(className) {
-      try {
-        const response = await fetch(`${SCRIPT_URL}?action=getFees&class=${encodeURIComponent(className)}`);
-        const data = await response.json();
-
-        if (data.success && data.fees) {
-          currentFees = data.fees;
-          populateFeesTable();
-        } else {
-          document.getElementById('no-fees-message').classList.remove('hidden');
-          document.getElementById('fees-table-body').innerHTML = '';
-        }
-      } catch (error) {
-        console.error('Load fees error:', error);
-        showToast('ফি তথ্য লোড করতে ব্যর্থ', 'error');
-      }
-    }
-
-    // Populate Fees Table
-    function populateFeesTable() {
-      const tableBody = document.getElementById('fees-table-body');
-      const noFeesMsg = document.getElementById('no-fees-message');
-
-      tableBody.innerHTML = '';
-      feeInputs = {};
-
-      if (currentFees.length === 0) {
-        noFeesMsg.classList.remove('hidden');
+        document.getElementById('error-message').textContent = `"${searchId}" আইডি দিয়ে কোনো শিক্ষার্থী পাওয়া যায়নি।`;
+        showToast('শিক্ষার্থী পাওয়া যায়নি', 'error');
         return;
       }
 
-      noFeesMsg.classList.add('hidden');
+      currentStudent = data;
+      document.getElementById('info-student-id').textContent = data.form_id || '-';
+      document.getElementById('info-student-name').textContent = data.student_name_bn || '-';
+      document.getElementById('info-student-class').textContent = data.admitted_class || '-';
 
-      currentFees.forEach((fee, index) => {
-        const row = document.createElement('tr');
-        row.innerHTML = `
-          <td class="font-bengali">${index + 1}</td>
-          <td class="font-bengali">${fee.item_name || '-'}</td>
-          <td class="font-english text-right">${formatCurrency(fee.amount || 0)}</td>
-          <td>
-            <input type="number" class="input-field" placeholder="0" value="0" data-fee-id="${index}" data-field="received" onchange="updateCalculations()" min="0">
-          </td>
-          <td>
-            <input type="number" class="input-field" placeholder="0" value="0" data-fee-id="${index}" data-field="discount" onchange="updateCalculations()" min="0">
-          </td>
-        `;
-        tableBody.appendChild(row);
+      await loadFeesForClass(data.admitted_class, data.form_id);
 
-        // Store reference to inputs
-        feeInputs[index] = {
-          amount: fee.amount || 0,
-          received: row.querySelector(`input[data-field="received"]`),
-          discount: row.querySelector(`input[data-field="discount"]`)
-        };
-      });
-
-      updateCalculations();
-    }
-
-    // Update Calculations
-    function updateCalculations() {
-      let totalPayable = 0;
-      let totalReceived = 0;
-      let totalDiscount = 0;
-
-      Object.keys(feeInputs).forEach(key => {
-        const fee = feeInputs[key];
-        totalPayable += fee.amount;
-        totalReceived += parseInt(fee.received.value) || 0;
-        totalDiscount += parseInt(fee.discount.value) || 0;
-      });
-
-      const netPayable = totalPayable - totalDiscount;
-
-      document.getElementById('total-payable').textContent = formatCurrency(totalPayable);
-      document.getElementById('total-received').textContent = formatCurrency(totalReceived);
-      document.getElementById('total-discount').textContent = formatCurrency(totalDiscount);
-      document.getElementById('net-payable').textContent = formatCurrency(netPayable);
-    }
-
-    // Submit Fees
-    function submitFees() {
-      const totalReceived = parseInt(document.getElementById('total-received').textContent.replace(/[^0-9]/g, '')) || 0;
-      const totalDiscount = parseInt(document.getElementById('total-discount').textContent.replace(/[^0-9]/g, '')) || 0;
-
-      if (totalReceived === 0 && totalDiscount === 0) {
-        showToast('অনুগ্রহ করে কমপক্ষে একটি পেমেন্ট বা ছাড় লিখুন', 'warning');
-        return;
-      }
-
-      // Show confirmation modal
-      document.getElementById('confirm-total-received').textContent = formatCurrency(totalReceived);
-      document.getElementById('confirm-total-discount').textContent = formatCurrency(totalDiscount);
-      document.getElementById('confirmation-modal').classList.add('active');
-    }
-
-    // Close Confirmation Modal
-    function closeConfirmationModal() {
-      document.getElementById('confirmation-modal').classList.remove('active');
-    }
-
-    // Confirm Submit
-    async function confirmSubmit() {
-      const confirmBtn = document.getElementById('confirm-submit-btn');
-      confirmBtn.disabled = true;
-
-      try {
-        const totalReceived = parseInt(document.getElementById('total-received').textContent.replace(/[^0-9]/g, '')) || 0;
-        const totalDiscount = parseInt(document.getElementById('total-discount').textContent.replace(/[^0-9]/g, '')) || 0;
-
-        const payload = {
-          action: 'submitFees',
-          std_id: currentStudent.form_id,
-          c_date: new Date().toISOString().split('T')[0],
-          c_amount: totalReceived,
-          discount: totalDiscount
-        };
-
-        const response = await fetch(SCRIPT_URL, {
-          method: 'POST',
-          body: JSON.stringify(payload)
-        });
-
-        const result = await response.json();
-
-        if (result.success) {
-          showToast('ফি সফলভাবে জমা দেওয়া হয়েছে', 'success');
-          closeConfirmationModal();
-          resetSearch();
-        } else {
-          showToast('জমা দেওয়ার সময় ত্রুটি', 'error');
-        }
-      } catch (error) {
-        console.error('Submit error:', error);
-        showToast('ফি জমা দিতে ব্যর্থ হয়েছে', 'error');
-      } finally {
-        confirmBtn.disabled = false;
-      }
-    }
-
-    // Reset Search
-    function resetSearch() {
-      document.getElementById('search-id').value = '';
-      document.getElementById('empty-state').classList.remove('hidden');
-      document.getElementById('error-state').classList.add('hidden');
-      document.getElementById('fees-container').classList.add('hidden');
       document.getElementById('loading-state').classList.add('hidden');
-      document.getElementById('search-id').focus();
-      currentStudent = null;
-      currentFees = [];
+      document.getElementById('fees-container').classList.remove('hidden');
+      showToast('শিক্ষার্থী তথ্য সফলভাবে লোড হয়েছে', 'success');
+
+    } catch (error) {
+      console.error('Search error:', error);
+      document.getElementById('loading-state').classList.add('hidden');
+      document.getElementById('error-state').classList.remove('hidden');
+      document.getElementById('error-message').textContent = 'ডেটা লোড করতে সমস্যা হয়েছে। পরে আবার চেষ্টা করুন।';
+      showToast('সার্ভার ত্রুটি', 'error');
+    }
+  }
+
+  // ==============================
+  // Load Fees
+  // ==============================
+  async function loadFeesForClass(className, studentId = '') {
+    try {
+      const response = await fetch(`${SCRIPT_URL}?action=getFees&class=${encodeURIComponent(className)}&id=${encodeURIComponent(studentId)}`);
+      const data = await response.json();
+
+      if (data.success && data.fees) {
+        currentFees = data.fees;
+        populateFeesTable();
+      } else {
+        document.getElementById('no-fees-message').classList.remove('hidden');
+        document.getElementById('fees-table-body').innerHTML = '';
+      }
+    } catch (error) {
+      console.error('Load fees error:', error);
+      showToast('ফি তথ্য লোড করতে ব্যর্থ', 'error');
+    }
+  }
+
+  // ==============================
+  // Populate Fees Table
+  // ==============================
+  function populateFeesTable() {
+    const tableBody = document.getElementById('fees-table-body');
+    const noFeesMsg = document.getElementById('no-fees-message');
+
+    tableBody.innerHTML = '';
+    feeInputs = {};
+
+    if (!currentFees.length) {
+      noFeesMsg.classList.remove('hidden');
+      return;
     }
 
-    // Auto-focus on search input
-    window.addEventListener('load', () => {
-      document.getElementById('search-id').focus();
+    noFeesMsg.classList.add('hidden');
+
+    currentFees.forEach((fee, index) => {
+      const row = document.createElement('tr');
+      row.innerHTML = `
+        <td class="font-bengali">${index + 1}</td>
+        <td class="font-bengali">${fee.item_name || '-'}</td>
+        <td class="font-english text-right">${formatCurrency(fee.amount || 0)}</td>
+        <td><input type="number" class="input-field" placeholder="0" value="0" data-fee-id="${index}" data-field="received" onchange="updateCalculations()" min="0"></td>
+        <td><input type="number" class="input-field" placeholder="0" value="0" data-fee-id="${index}" data-field="discount" onchange="updateCalculations()" min="0"></td>
+      `;
+      tableBody.appendChild(row);
+
+      feeInputs[index] = {
+        amount: fee.amount || 0,
+        received: row.querySelector(`input[data-field="received"]`),
+        discount: row.querySelector(`input[data-field="discount"]`)
+      };
     });
-  </script>
+
+    updateCalculations();
+  }
+
+  // ==============================
+  // Update Calculations
+  // ==============================
+  function updateCalculations() {
+    let totalPayable = 0, totalReceived = 0, totalDiscount = 0;
+
+    Object.values(feeInputs).forEach(fee => {
+      totalPayable += fee.amount;
+      totalReceived += parseInt(fee.received.value) || 0;
+      totalDiscount += parseInt(fee.discount.value) || 0;
+    });
+
+    const netPayable = totalPayable - totalDiscount;
+
+    document.getElementById('total-payable').textContent = formatCurrency(totalPayable);
+    document.getElementById('total-received').textContent = formatCurrency(totalReceived);
+    document.getElementById('total-discount').textContent = formatCurrency(totalDiscount);
+    document.getElementById('net-payable').textContent = formatCurrency(netPayable);
+  }
+
+  // ==============================
+  // Submit Fees
+  // ==============================
+  function submitFees() {
+    let totalR = 0, totalD = 0;
+
+    Object.values(feeInputs).forEach(fee => {
+      totalR += parseInt(fee.received.value) || 0;
+      totalD += parseInt(fee.discount.value) || 0;
+    });
+
+    if (totalR === 0 && totalD === 0) {
+      showToast('অনুগ্রহ করে কমপক্ষে একটি পেমেন্ট বা ছাড় লিখুন', 'warning');
+      return;
+    }
+
+    window.tempReceived = totalR;
+    window.tempDiscount = totalD;
+
+    document.getElementById('confirm-total-received').textContent = formatCurrency(totalR);
+    document.getElementById('confirm-total-discount').textContent = formatCurrency(totalD);
+    document.getElementById('confirmation-modal').classList.add('active');
+  }
+
+  function closeConfirmationModal() {
+    document.getElementById('confirmation-modal').classList.remove('active');
+  }
+
+  async function confirmSubmit() {
+    const confirmBtn = document.getElementById('confirm-submit-btn');
+    confirmBtn.disabled = true;
+    confirmBtn.textContent = "অপেক্ষা করুন...";
+
+    try {
+      const paymentDetails = [];
+      Object.keys(feeInputs).forEach(key => {
+        const received = parseInt(feeInputs[key].received.value) || 0;
+        const discount = parseInt(feeInputs[key].discount.value) || 0;
+        if (received > 0 || discount > 0) {
+          paymentDetails.push({
+            item_name: currentFees[key].item_name,
+            amount: received,
+            discount: discount
+          });
+        }
+      });
+
+      const payload = {
+        action: 'submitFeesDetailed',
+        std_id: currentStudent.form_id,
+        c_date: new Date().toLocaleDateString('en-GB'),
+        details: paymentDetails
+      };
+
+      await fetch(SCRIPT_URL, {
+        method: 'POST',
+        mode: 'no-cors',
+        cache: 'no-cache',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      });
+
+      showToast('ফি সফলভাবে জমা দেওয়া হয়েছে', 'success');
+      setTimeout(() => {
+        closeConfirmationModal();
+        resetSearch();
+      }, 1500);
+
+    } catch (error) {
+      console.error('Error:', error);
+      showToast('পেমেন্ট সেভ করতে সমস্যা হয়েছে', 'error');
+    } finally {
+      confirmBtn.disabled = false;
+      confirmBtn.textContent = "জমা দিন";
+    }
+  }
+
+  // ==============================
+  // Reset Search
+  // ==============================
+  function resetSearch() {
+    document.getElementById('search-id').value = '';
+    document.getElementById('empty-state').classList.remove('hidden');
+    document.getElementById('error-state').classList.add('hidden');
+    document.getElementById('fees-container').classList.add('hidden');
+    document.getElementById('loading-state').classList.add('hidden');
+    document.getElementById('search-id').focus();
+    currentStudent = null;
+    currentFees = [];
+  }
+
+  window.addEventListener('load', () => document.getElementById('search-id').focus());
+
+</script>
  <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9d3080de73777cd7',t:'MTc3MTk1MjI2MS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
