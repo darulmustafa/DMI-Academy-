@@ -337,10 +337,27 @@
      <div class="mb-6 text-white">
       <div class="flex items-center gap-3 mb-3">
        <div class="w-16 h-16 bg-white rounded-full flex items-center justify-center shadow-lg">
-        <svg viewbox="0 0 100 100" class="w-14 h-14"><circle cx="50" cy="50" r="45" fill="#0d6e3f" stroke="#c9a227" stroke-width="3" /> <path d="M50 15 L50 35 M50 65 L50 85" stroke="#c9a227" stroke-width="2" /> <circle cx="50" cy="50" r="20" fill="none" stroke="#c9a227" stroke-width="2" /> <text x="50" y="55" text-anchor="middle" fill="#ffffff" font-size="12" font-weight="bold">
-          دم
-         </text>
-        </svg>
+        <svg viewbox="0 0 100 100" class="w-14 h-14">
+  <circle cx="50" cy="50" r="45" fill="#0d6e3f" stroke="#c9a227" stroke-width="3" /> 
+  
+  <path d="M50 5 L50 15 M50 85 L50 95 M5 50 L15 50 M85 50 L95 50" stroke="#c9a227" stroke-width="2" /> 
+  
+  <circle cx="50" cy="50" r="35" fill="#ffffff" stroke="#c9a227" stroke-width="2" /> 
+
+  <defs>
+    <clipPath id="circleView">
+      <circle cx="50" cy="50" r="34" />
+    </clipPath>
+  </defs>
+  
+  <image 
+    xlink:href="logo.jpg" 
+    x="15" y="15" 
+    height="70" width="70" 
+    clip-path="url(#circleView)"
+    preserveAspectRatio="xMidYMid slice"
+  />
+</svg>
        </div>
        <div class="flex-1">
         <h1 class="text-xl md:text-2xl font-bold font-bengali" id="header-institution-bn">দারুল মোস্তফা সাঃ ইসলামী একাডেমি</h1>
