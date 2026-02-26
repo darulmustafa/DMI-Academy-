@@ -825,7 +825,7 @@
       const payload = {
         action: 'submitFeesDetailed',
         std_id: currentStudent.form_id,
-        c_date: new Date().toISOString().split('T')[0],
+        c_date: new Date().toLocaleDateString('en-GB'),
         details: paymentDetails
       };
 
