@@ -825,10 +825,10 @@
       const payload = {
         action: 'submitFeesDetailed',
         std_id: currentStudent.form_id,
-        c_date: new Date().toLocaleDateString('en-GB'),
+        c_date: new Date().toISOString().split('T')[0],
         details: paymentDetails
       };
-
+     
       await fetch(SCRIPT_URL, {
         method: 'POST',
         mode: 'no-cors',
