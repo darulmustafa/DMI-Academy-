@@ -1,0 +1,705 @@
+<!doctype html>
+<html lang="bn" class="h-full">
+ <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Payment Receipt - দারুল মোস্তফা সাঃ ইসলামী একাডেমি</title>
+  <script src="https://cdn.tailwindcss.com/3.4.17"></script>
+  <script src="/_sdk/element_sdk.js"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@300;400;500;600;700&amp;family=Poppins:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary-green: #0d6e3f;
+      --secondary-gold: #c9a227;
+      --dark-text: #1a1a2e;
+    }
+    
+    * {
+      font-family: 'Hind Siliguri', 'Poppins', sans-serif;
+    }
+    
+    .font-bengali {
+      font-family: 'Hind Siliguri', sans-serif;
+    }
+    
+    .font-english {
+      font-family: 'Poppins', sans-serif;
+    }
+    
+    html, body {
+      height: 100%;
+    }
+    
+    body {
+      background: linear-gradient(135deg, #f0fdf4 0%, #fef3c7 100%);
+    }
+    
+    .search-container {
+      background: linear-gradient(135deg, rgba(13, 110, 63, 0.95) 0%, rgba(201, 162, 39, 0.95) 100%);
+      backdrop-filter: blur(10px);
+      box-shadow: 0 8px 32px rgba(13, 110, 63, 0.2);
+    }
+    
+    .search-input {
+      transition: all 0.3s ease;
+      border: 2px solid rgba(255, 255, 255, 0.3);
+      background: rgba(255, 255, 255, 0.95);
+    }
+    
+    .search-input:focus {
+      border-color: white;
+      box-shadow: 0 0 20px rgba(201, 162, 39, 0.5);
+      outline: none;
+    }
+    
+    .receipt-card {
+      background: white;
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+      border-radius: 12px;
+      overflow: hidden;
+      animation: slideUp 0.5s ease;
+      position: relative;
+    }
+    
+    @keyframes slideUp {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    
+.receipt-header {
+  background: white; /* ব্যাকগ্রাউন্ড কালার সাদা করা হয়েছে */
+  padding: 20px;
+  color: #1a1a2e; /* টেক্সট কালার কালচে করা হয়েছে (ডার্ক টেক্সট ভেরিয়েবল অনুযায়ী) */
+  text-align: center;
+  border-bottom: 3px solid #ddd; /* বর্ডার কালার হালকা ধূসর করা হয়েছে সাদা ব্যাকগ্রাউন্ডের সাথে সামঞ্জস্য রেখে */
+}
+
+/* নিশ্চিত করতে হবে যে হেডার টেক্সটগুলি সঠিক কালার ব্যবহার করছে */
+.receipt-header h2,
+.receipt-header p {
+  color: inherit; /* প্যারেন্ট (.receipt-header) এর কালার ইনহেরিট করবে */
+}
+
+    
+    .receipt-copy-label {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      background: black(255, 255, 255, 0.3);
+      color: Black;
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-size: 0.75rem;
+      font-weight: bold;
+      font-family: 'Poppins', sans-serif;
+    }
+    
+    .receipt-body {
+      padding: 16px;
+    }
+    
+    .receipt-row {
+      display: flex;
+      justify-content: space-between;
+      padding: 6px 0;
+      font-size: 0.9rem;
+      border-bottom: 1px solid #e5e7eb;
+    }
+    
+    .receipt-row:last-child {
+      border-bottom: none;
+    }
+    
+    .receipt-label {
+      font-weight: 600;
+      color: #4b5563;
+    }
+    
+    .receipt-value {
+      color: #1a1a2e;
+    }
+    
+    .receipt-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 16px 0;
+      font-size: 0.85rem;
+    }
+    
+    .receipt-table th {
+      background-color: #0d6e3f;
+      color: white;
+      padding: 8px;
+      text-align: left;
+      border: 1px solid #0d6e3f;
+      font-weight: 600;
+    }
+    
+    .receipt-table td {
+      padding: 8px;
+      border: 1px solid #d1d5db;
+    }
+    
+    .receipt-table td:nth-child(2),
+    .receipt-table td:nth-child(3),
+    .receipt-table td:nth-child(4) {
+      text-align: right;
+    }
+    
+    .receipt-total {
+      background-color: #f3f4f6;
+      font-weight: 600;
+      color: #0d6e3f;
+      border: 1px solid #d1d5db;
+    }
+    
+    .receipt-footer {
+      margin-top: 20px;
+      padding-top: 20px;
+      border-top: 2px dashed #d1d5db;
+    }
+    
+    .signature-row {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 20px;
+      margin-top: 20px;
+    }
+    
+    .signature-box {
+      text-align: center;
+    }
+    
+    .signature-line {
+      border-bottom: 2px solid #000;
+      height: 60px;
+      margin-bottom: 8px;
+    }
+    
+    .signature-label {
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: var(--dark-text);
+    }
+    
+    .receipts-container {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 20px;
+      max-width: 1200px;
+      margin: 20px auto;
+    }
+    
+    .total-in-words {
+      background-color: #e5fdf9;
+      border-left: 4px solid #0d6e3f;
+      padding: 10px;
+      margin: 10px 0;
+      font-size: 0.85rem;
+      color: #0d6e3f;
+      font-weight: 500;
+    }
+    
+    .toast {
+      animation: slideIn 0.3s ease;
+    }
+    
+    @keyframes slideIn {
+      from {
+        transform: translateX(100%);
+        opacity: 0;
+      }
+      to {
+        transform: translateX(0);
+        opacity: 1;
+      }
+    }
+    
+    .btn-group {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+    
+    .btn-primary {
+      background: linear-gradient(135deg, var(--primary-green) 0%, #1a8f5c 100%);
+      color: white;
+      padding: 12px 24px;
+      border-radius: 8px;
+      border: none;
+      cursor: pointer;
+      font-weight: 600;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    
+    .btn-primary:hover {
+      box-shadow: 0 8px 16px rgba(13, 110, 63, 0.3);
+      transform: translateY(-2px);
+    }
+    
+    .btn-secondary {
+      background: linear-gradient(135deg, #6b7280 0%, #4b5563 100%);
+      color: white;
+      padding: 12px 24px;
+      border-radius: 8px;
+      border: none;
+      cursor: pointer;
+      font-weight: 600;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    
+    .btn-secondary:hover {
+      box-shadow: 0 8px 16px rgba(75, 85, 99, 0.3);
+      transform: translateY(-2px);
+    }
+    
+    .btn-primary:disabled, .btn-secondary:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+      transform: none;
+    }
+    
+    .empty-state {
+      text-align: center;
+      padding: 60px 20px;
+      color: #6b7280;
+    }
+    
+    .empty-state-icon {
+      font-size: 64px;
+      margin-bottom: 16px;
+      opacity: 0.5;
+    }
+    
+    .loading-spinner {
+      border: 3px solid #f3f3f3;
+      border-top: 3px solid var(--primary-green);
+      border-radius: 50%;
+      width: 32px;
+      height: 32px;
+      animation: spin 1s linear infinite;
+    }
+    
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+    
+    @media (max-width: 768px) {
+      .receipts-container {
+        grid-template-columns: 1fr;
+      }
+      
+      .signature-row {
+        grid-template-columns: 1fr;
+      }
+    }
+    
+    @media print {
+      body {
+        background: white !important;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+      }
+      
+      .no-print {
+        display: none !important;
+      }
+      
+      .receipt-card {
+        box-shadow: none !important;
+        border: 2px solid #000 !important;
+        page-break-inside: avoid;
+        margin-bottom: 20px;
+      }
+      
+      .receipt-header {
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+      }
+      
+      .receipt-table {
+        border-collapse: collapse;
+      }
+      
+      .receipt-table th, .receipt-table td {
+        border: 1px solid #000 !important;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+      }
+      
+      .search-container {
+        display: none !important;
+      }
+      
+      .receipts-container {
+        grid-template-columns: 1fr;
+        gap: 0;
+      }
+    }
+  </style>
+  <style>body { box-sizing: border-box; }</style>
+  <script src="/_sdk/data_sdk.js" type="text/javascript"></script>
+ </head>
+ <body class="h-full overflow-auto">
+  <div id="app" class="h-full flex flex-col"><!-- Toast Container -->
+   <div id="toast-container" class="fixed top-4 right-4 z-50 max-w-sm"></div><!-- Search Bar -->
+   <div class="search-container sticky top-0 z-40 no-print">
+    <div class="max-w-6xl mx-auto p-4">
+     <div class="mb-4 text-white">
+      <h1 class="text-xl font-bold font-bengali">Payment Receipt</h1>
+      <p class="text-emerald-100 text-sm font-english">Collection Receipt Generator</p>
+     </div>
+     <div class="bg-white/10 backdrop-blur-md rounded-xl p-4">
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-3 mb-3">
+       <div><label class="block text-white text-sm font-bold mb-2 font-bengali">শিক্ষার্থী আইডি | Student ID</label> <input type="text" id="search-id" class="search-input w-full px-4 py-2 rounded-lg font-english" placeholder="e.g., STU001" onkeypress="if(event.key==='Enter') searchReceipt()">
+       </div>
+       <div><label class="block text-white text-sm font-bold mb-2 font-bengali">তারিখ | Date</label> <input type="date" id="search-date" class="search-input w-full px-4 py-2 rounded-lg font-english" onkeypress="if(event.key==='Enter') searchReceipt()">
+       </div>
+       <div class="flex items-end gap-2"><button onclick="searchReceipt()" class="btn-primary flex-1">
+         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+         </svg><span class="font-bengali">খুঁজুন</span> </button> <button onclick="resetSearch()" class="btn-secondary">
+         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+         </svg></button>
+       </div>
+      </div>
+     </div>
+    </div>
+   </div><!-- Main Content -->
+   <div class="flex-1 overflow-auto p-4">
+    <div class="max-w-6xl mx-auto"><!-- Empty State -->
+     <div id="empty-state" class="empty-state">
+      <div class="empty-state-icon">
+       📄
+      </div>
+      <h2 class="text-2xl font-bold text-gray-700 mb-2 font-bengali">পেমেন্ট রসিদ খুঁজুন</h2>
+      <p class="text-gray-600 font-english">Search for payment receipts</p>
+      <p class="text-gray-500 text-sm mt-4 font-bengali">শিক্ষার্থীর আইডি এবং তারিখ দিয়ে খোঁজ করুন</p>
+     </div><!-- Loading State -->
+     <div id="loading-state" class="hidden text-center py-12">
+      <div class="flex justify-center mb-4">
+       <div class="loading-spinner"></div>
+      </div>
+      <p class="text-gray-600 font-bengali">অপেক্ষা করুন...</p>
+      <p class="text-gray-500 text-sm font-english">Loading receipt details...</p>
+     </div><!-- Receipts Container -->
+     <div id="receipts-container" class="hidden">
+      <div class="receipts-container" id="receipts-content"></div><!-- Action Buttons -->
+      <div class="btn-group no-print mt-6 justify-center"><button onclick="printReceipts()" class="btn-primary">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z" />
+        </svg><span class="font-bengali">প্রিন্ট করুন</span> </button> <button onclick="resetSearch()" class="btn-secondary">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+        </svg><span class="font-bengali">নতুন অনুসন্ধান</span> </button>
+      </div>
+     </div><!-- Error State -->
+     <div id="error-state" class="hidden text-center py-12 px-4">
+      <div class="text-6xl mb-4">
+       ❌
+      </div>
+      <h2 class="text-2xl font-bold text-gray-700 mb-2 font-bengali">রসিদ পাওয়া যায়নি</h2>
+      <p class="text-gray-600 font-english mb-4">Receipt not found</p>
+      <p class="text-gray-500 text-sm font-bengali" id="error-message">দেওয়া আইডি এবং তারিখ দিয়ে কোনো রসিদ পাওয়া যায়নি।</p><button onclick="resetSearch()" class="btn-primary mt-6 mx-auto"> <span class="font-bengali">পুনরায় খোঁজ করুন</span> </button>
+     </div>
+    </div>
+   </div>
+  </div>
+<script>
+  // ==============================
+  // Configuration
+  // ==============================
+  const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzRes-5LAxyFUwCmq4RaLopNU5BmGLu5JzUCXnfYfn2py2DrCcyj90kVHw-j6SYfAyz/exec";
+
+  const defaultConfig = {
+    institution_name_bn: 'দারুল মোস্তফা সাঃ ইসলামী একাডেমি',
+    institution_name_en: 'Darul Mustafa (SAW) Islamic Academy',
+    institution_address: 'পাথর পাড়া, বাইতুল মামুর জামে মসজিদ সংলগ্ন, মছজিদ্দা, সীতাকুণ্ড, চট্টগ্রাম'
+  };
+
+  // ==============================
+  // Initialize SDK
+  // ==============================
+  if (window.elementSdk) {
+    window.elementSdk.init({ defaultConfig });
+  }
+
+  // ==============================
+  // Toast
+  // ==============================
+  function showToast(message, type = 'info') {
+    const container = document.getElementById('toast-container');
+    const toast = document.createElement('div');
+
+    let bgClass = 'bg-blue-600';
+    if (type === 'success') bgClass = 'bg-emerald-600';
+    if (type === 'error') bgClass = 'bg-red-600';
+    if (type === 'warning') bgClass = 'bg-amber-600';
+
+    toast.className = `toast ${bgClass} text-white px-6 py-4 rounded-lg shadow-xl mb-3 font-medium font-bengali`;
+    toast.textContent = message;
+    container.appendChild(toast);
+
+    setTimeout(() => {
+      toast.remove();
+    }, 4000);
+  }
+
+  // ==============================
+  // Bengali Date
+  // ==============================
+  function formatDateBengali(dateStr) {
+    const date = new Date(dateStr + 'T00:00:00');
+    return date.toLocaleDateString('bn-BD', {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric'
+    });
+  }
+
+  // ==============================
+  // Bengali Number (Improved)
+  // ==============================
+  function numberToBengaliWords(num) {
+    if (num === 0) return 'শূন্য টাকা';
+    if (num > 1000) return num.toLocaleString('bn-BD') + ' টাকা'; // ১০০০ এর বেশি হলে সংখ্যা দেখাবে
+
+    const units = ['', 'এক', 'দুই', 'তিন', 'চার', 'পাঁচ', 'ছয়', 'সাত', 'আট', 'নয়', 'দশ', 
+                   'এগারো', 'বারো', 'তেরো', 'চৌদ্দ', 'পনেরো', 'ষোল', 'সতেরো', 'আঠারো', 'উনিশ', 'বিশ',
+                   'একুশ', 'বাইশ', 'তেইশ', 'চব্বিশ', 'পঁচিশ', 'ছাব্বিশ', 'সাতাশ', 'আঠাশ', 'ঊনত্রিশ', 'ত্রিশ',
+                   'একত্রিশ', 'বত্রিশ', 'তেতাল্লিশ', 'চুয়াল্লিশ', 'পঁয়তাল্লিশ', 'ছেচল্লিশ', 'সাতচল্লিশ', 'আটচল্লিশ', 'ঊনপঞ্চাশ', 'পঞ্চাশ',
+                   'একান্ন', 'বায়ান্ন', 'তিপ্পান্ন', 'চুয়ান্ন', 'পঞ্চান্ন', 'ছাপ্পান্ন', 'সাতান্ন', 'আটান্ন', 'ঊনষাট', 'ষাট',
+                   'একষাট', 'বাষাট', 'তেষাট', 'চৌষাট', 'পঁয়ষাট', 'ছেষাট', 'সাতষাট', 'আটষাট', 'ঊনসত্তর', 'সত্তর',
+                   'একাত্তর', 'বাহাত্তর', 'তিয়াত্তর', 'চুয়াত্তর', 'পঁচাত্তর', 'ছিয়াত্তর', 'সাতাত্তর', 'আটাত্তর', 'ঊনআশি', 'আশি',
+                   'একাশি', 'বিরাশি', 'তিরাশি', 'চুরাশি', 'পঁচাশি', 'ছিয়াশি', 'সাতাসি', 'অষ্টাসি', 'ঊননব্বই', 'নব্বই',
+                   'একানব্বই', 'বিরানব্বই', 'তিরানব্বই', 'চুরানব্বই', 'পঁচানব্বই', 'ছিয়ানব্বই', 'সাতানব্বই', 'আটানব্বই', 'নিরানব্বই', 'একশ'];
+
+    let words = '';
+
+    if (num === 1000) return 'এক হাজার টাকা';
+
+    if (num >= 100) {
+        let hundreds = Math.floor(num / 100);
+        if (hundreds === 1) {
+            words += 'একশত ';
+        } else {
+            words += units[hundreds] + 'শত ';
+        }
+        num %= 100;
+    }
+
+    if (num > 0) {
+        words += units[num];
+    }
+
+    return words.trim() + ' টাকা ';
+}
+
+
+  // ==============================
+  // Search Receipt (API Based)
+  // ==============================
+  async function searchReceipt() {
+    const studentId = document.getElementById('search-id').value.trim();
+    const searchDate = document.getElementById('search-date').value;
+
+    if (!studentId || !searchDate) {
+      showToast('আইডি এবং তারিখ সঠিকভাবে দিন', 'warning');
+      return;
+    }
+
+    document.getElementById('empty-state').classList.add('hidden');
+    document.getElementById('error-state').classList.add('hidden');
+    document.getElementById('receipts-container').classList.add('hidden');
+    document.getElementById('loading-state').classList.remove('hidden');
+
+    try {
+      const response = await fetch(`${SCRIPT_URL}?action=getReceipt&id=${studentId}&date=${searchDate}`);
+      const result = await response.json();
+
+      if (result.success) {
+        displayReceipts(result.student, result.items, searchDate);
+        document.getElementById('loading-state').classList.add('hidden');
+        document.getElementById('receipts-container').classList.remove('hidden');
+        showToast('রসিদ লোড হয়েছে', 'success');
+      } else {
+        throw new Error(result.msg || 'রসিদ পাওয়া যায়নি');
+      }
+
+    } catch (error) {
+      document.getElementById('loading-state').classList.add('hidden');
+      document.getElementById('error-state').classList.remove('hidden');
+      document.getElementById('error-message').textContent = error.message;
+      showToast('ব্যর্থ হয়েছে', 'error');
+    }
+  }
+
+// ==============================
+// Display Receipts (সঠিক বকেয়া হিসাবসহ মার্জ করা)
+// ==============================
+function displayReceipts(studentInfo, collections, searchDate) {
+  const container = document.getElementById('receipts-content');
+  container.innerHTML = '';
+
+  let totalCharge = 0;
+  let totalPaidToday = 0;
+  let totalPrevPaid = 0;
+  let totalDiscount = 0;
+  let totalNetDue = 0;
+
+  // আইটেম অনুযায়ী হিসাব এবং টেবিল রো তৈরি
+  const tableRows = collections.map(item => {
+    const charge = item.charge || 0; 
+    const paidToday = item.amount || 0;
+    const discount = item.discount || 0;
+    
+    // Apps Script থেকে আসা পূর্বের জমা (না থাকলে ০)
+    const prevPaid = item.previousPaid || 0; 
+    
+    // সঠিক নিট বকেয়া ক্যালকুলেশন
+    const netDue = charge - (prevPaid + paidToday + discount);
+
+    // সর্বমোট হিসাব আপডেট
+    totalCharge += charge;
+    totalPaidToday += paidToday;
+    totalPrevPaid += prevPaid;
+    totalDiscount += discount;
+    totalNetDue += netDue;
+
+    return `
+      <tr>
+        <td class="font-bengali text-xs">${item.itemName}</td>
+        <td class="text-right font-english">${charge.toFixed(0)}</td>
+        <td class="text-right font-english">${prevPaid.toFixed(0)}</td>
+        <td class="text-right font-english">${paidToday.toFixed(0)}</td>
+        <td class="text-right font-english ${netDue > 0 ? 'text-red-600 font-bold' : 'text-green-600'}">
+          ${netDue.toFixed(0)}
+        </td>
+      </tr>
+    `;
+  }).join('');
+
+  // মাদরাসা ও শিক্ষার্থী উভয় কপির জন্য লুপ
+  ['Madrasha Copy', 'Student Copy'].forEach(copyLabel => {
+    const receipt = document.createElement('div');
+    receipt.className = 'receipt-card p-4';
+    receipt.innerHTML = `
+      <div class="receipt-copy-label">${copyLabel}</div>
+      
+      <div class="receipt-header text-center">
+        <div class="flex justify-center mb-2">
+          <svg viewBox="0 0 100 100" class="w-16 h-16">
+            <circle cx="50" cy="50" r="45" fill="#0d6e3f" stroke="#c9a227" stroke-width="2" />
+            <circle cx="50" cy="50" r="35" fill="white" />
+            <defs>
+              <clipPath id="circleView">
+                <circle cx="50" cy="50" r="34" />
+              </clipPath>
+            </defs>
+            <image xlink:href="logo.jpg" x="15" y="15" height="70" width="70" 
+              clip-path="url(#circleView)" preserveAspectRatio="xMidYMid slice" />
+          </svg>
+        </div>
+        <h2 class="font-bengali text-lg font-bold">${defaultConfig.institution_name_bn}</h2>
+        <p class="font-english text-xs">${defaultConfig.institution_name_en}</p>
+        <p class="font-bengali text-[10px] opacity-90">${defaultConfig.institution_address}</p>
+        <div class="mt-2 pt-1 border-t border-gray-200">
+          <p class="font-bengali font-bold text-sm">অর্থ প্রাপ্তি রসিদ (Money Receipt)</p>
+        </div>
+      </div>
+      
+      <div class="receipt-body p-3">
+        <div class="grid grid-cols-2 gap-x-4 gap-y-1 text-xs mb-3 border-b pb-2">
+          <div><span class="font-bold">আইডি:</span> <span class="font-english">${studentInfo.id}</span></div>
+          <div class="text-right"><span class="font-bold">তারিখ:</span> ${formatDateBengali(searchDate)}</div>
+          <div class="col-span-2"><span class="font-bold">নাম:</span> ${studentInfo.name}</div>
+          <div><span class="font-bold">শ্রেণী:</span> ${studentInfo.class}</div>
+          <div class="text-right"><span class="font-bold">রোল:</span> <span class="font-english">${studentInfo.roll}</span></div>
+        </div>
+
+        <table class="receipt-table w-full text-[10px]">
+          <thead>
+            <tr class="bg-gray-100">
+              <th class="font-bengali text-left p-1">Details</th>
+              <th class="text-right p-1">Charge</th>
+              <th class="text-right p-1">PrevPaid</th>
+              <th class="text-right p-1">Paid Today</th>
+              <th class="text-right p-1">Due</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${tableRows}
+            <tr class="receipt-total border-t-2 border-gray-300">
+              <td class="font-bold font-bengali p-1">মোট</td>
+              <td class="text-right font-bold font-english p-1">${totalCharge.toFixed(0)}</td>
+              <td class="text-right font-bold font-english p-1">${totalPrevPaid.toFixed(0)}</td>
+              <td class="text-right font-bold font-english p-1">${totalPaidToday.toFixed(0)}</td>
+              <td class="text-right font-bold font-english p-1">${totalNetDue.toFixed(0)}</td>
+            </tr>
+          </tbody>
+        </table>
+        
+        <div class="total-in-words mb-4 mt-3 text-xs">
+          <strong class="font-bengali">কথায় (আজকের আদায়):</strong> ${numberToBengaliWords(Math.round(totalPaidToday))} মাত্র।
+        </div>
+        
+        <div class="receipt-footer mt-10">
+          <div class="signature-row grid grid-cols-2 gap-8">
+            <div class="signature-box text-center">
+              <div class="border-t border-black pt-1">
+                <p class="font-bengali text-[10px] font-bold">আদায়কারীর স্বাক্ষর</p>
+                <p class="text-[8px] text-gray-500 font-english">Authorized Signature</p>
+              </div>
+            </div>
+            <div class="signature-box text-center">
+              <div class="border-t border-black pt-1">
+                <p class="font-bengali text-[10px] font-bold">অভিভাবকের স্বাক্ষর</p>
+                <p class="text-[8px] text-gray-500 font-english">Parent Signature</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    `;
+    
+    container.appendChild(receipt);
+  });
+}
+
+
+  // ==============================
+  // Print
+  // ==============================
+  function printReceipts() {
+    window.print();
+    showToast('প্রিন্ট উইন্ডো খোলা হয়েছে', 'info');
+  }
+
+  // ==============================
+  // Init
+  // ==============================
+  window.addEventListener('load', () => {
+    document.getElementById('search-date').value =
+      new Date().toISOString().split('T')[0];
+    document.getElementById('search-id').focus();
+  });
+
+</script>
+ <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9d395b36e3b27cd7',t:'MTc3MjA0NTA5MC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
