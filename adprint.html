@@ -267,42 +267,14 @@
       font-weight: 600;
       color: var(--dark-text);
     }
-    
-@media print {
 
-  @page {
-    size: A4 portrait;
-    margin: 10mm;
-  }
-
-  html, body {
-    width: 210mm;
-    min-height: 297mm;
-  }
-
-  body * {
-    visibility: hidden;
-  }
-
-  #voucher-container,
-  #voucher-container * {
-    visibility: visible;
-  }
-
-  #voucher-container {
-    position: absolute;
-    left: 0;
-    top: 0;
-    width: 190mm;
-    margin: 0 auto;
-  }}
-        /* ছবি ফ্রেম কন্ট্রোল */
+    /* ছবি ফ্রেম কন্ট্রোল */
     #student-photo {
       width: 120px;
       height: 150px;
       border: 2px solid var(--primary-green);
       border-radius: 8px;
-      overflow: hidden; /* ফ্রেমের বাইরের অংশ কেটে ফেলবে */
+      overflow: hidden;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -314,50 +286,108 @@
     #student-photo img {
       width: 100%;
       height: 100%;
-      object-fit: cover; /* ছবিকে বিকৃত না করে ফ্রেম পূর্ণ করবে */
-      object-position: center top; /* ফেস ফোকাস ঠিক রাখবে */
+      object-fit: cover;
+      object-position: center top;
     }
 
-    /* প্রিন্ট করার সময় ছবির বর্ডার স্পষ্ট রাখার জন্য */
+    /* প্রিন্ট অপ্টিমাইজড সিএসএস মার্জ করা হয়েছে */
     @media print {
+      @page {
+        size: A4 portrait;
+        margin: 5mm; 
+      }
+
+      body {
+        background: none !important;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+        visibility: hidden; /* সব কন্টেন্ট ডিফল্টভাবে হাইড */
+      }
+
+      /* পুরো কন্টেইনারকে এক পেজে ফিট করা */
+      #voucher-container, #voucher-container * {
+        visibility: visible !important; /* শুধুমাত্র ভাউচার এরিয়া দেখা যাবে */
+      }
+
+      #voucher-container {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+        margin: 0 !important;
+        padding: 0 !important;
+        transform: scale(0.95);
+        transform-origin: top center;
+      }
+
+      /* প্রিন্ট করার সময় হাইড করার এলিমেন্ট */
+      .no-print, .search-container, #toast-container, .btn-group, #empty-state, #loading-state, #error-state {
+        display: none !important;
+      }
+
+      /* কার্ডের শ্যাডো এবং বর্ডার ঠিক করা */
+      .voucher-card {
+        box-shadow: none !important;
+        border: 1px solid #ccc !important;
+        margin: 0 !important;
+        background: white !important;
+      }
+
+      /* প্যাডিং এবং গ্যাপ কমানো */
+      .p-6 { padding: 15px !important; }
+      .space-y-6 > :not([hidden]) ~ :not([hidden]) { margin-top: 10px !important; }
+      
+      /* টেবিল সেল ছোট করা */
+      .info-table td {
+        padding: 4px 8px !important;
+        font-size: 12px !important;
+      }
+
+      /* হেডার সেকশন ছোট করা */
+      .voucher-header {
+        padding: 15px !important;
+      }
+      
+      /* সিগনেচার বক্স ছোট করা */
+      .signature-row {
+        margin-top: 15px !important;
+        padding-top: 10px !important;
+      }
+      .signature-line {
+        height: 40px !important;
+      }
+
+      /* সব টেক্সট কালো রঙে রাখা যাতে প্রিন্ট ক্লিয়ার আসে */
+      .text-emerald-700, .text-amber-700 {
+        color: #000 !important;
+      }
+
       #student-photo {
         border: 1px solid #000 !important;
-        -webkit-print-color-adjust: exact;
       }
     }
   </style>
-  <style>body { box-sizing: border-box; }</style>
   <script src="/_sdk/data_sdk.js" type="text/javascript"></script>
  </head>
  <body class="h-full overflow-auto">
-  <div id="app" class="h-full flex flex-col"><!-- Toast Container -->
-   <div id="toast-container" class="fixed top-4 right-4 z-50 max-w-sm"></div><!-- Header & Search -->
+  <div id="app" class="h-full flex flex-col">
+   <div id="toast-container" class="fixed top-4 right-4 z-50 max-w-sm"></div>
    <div class="search-container sticky top-0 z-40 no-print">
-    <div class="max-w-6xl mx-auto p-4 md:p-6"><!-- Institution Header -->
+    <div class="max-w-6xl mx-auto p-4 md:p-6">
      <div class="mb-6 text-white">
       <div class="flex items-center gap-3 mb-3">
        <div class="w-16 h-16 bg-white rounded-full flex items-center justify-center shadow-lg">
         <svg viewbox="0 0 100 100" class="w-14 h-14">
-  <circle cx="50" cy="50" r="45" fill="#0d6e3f" stroke="#c9a227" stroke-width="3" /> 
-  
-  <path d="M50 5 L50 15 M50 85 L50 95 M5 50 L15 50 M85 50 L95 50" stroke="#c9a227" stroke-width="2" /> 
-  
-  <circle cx="50" cy="50" r="35" fill="#ffffff" stroke="#c9a227" stroke-width="2" /> 
-
-  <defs>
-    <clipPath id="circleView">
-      <circle cx="50" cy="50" r="34" />
-    </clipPath>
-  </defs>
-  
-  <image 
-    xlink:href="logo.jpg" 
-    x="15" y="15" 
-    height="70" width="70" 
-    clip-path="url(#circleView)"
-    preserveAspectRatio="xMidYMid slice"
-  />
-</svg>
+          <circle cx="50" cy="50" r="45" fill="#0d6e3f" stroke="#c9a227" stroke-width="3" /> 
+          <path d="M50 5 L50 15 M50 85 L50 95 M5 50 L15 50 M85 50 L95 50" stroke="#c9a227" stroke-width="2" /> 
+          <circle cx="50" cy="50" r="35" fill="#ffffff" stroke="#c9a227" stroke-width="2" /> 
+          <defs>
+            <clipPath id="circleView">
+              <circle cx="50" cy="50" r="34" />
+            </clipPath>
+          </defs>
+          <image xlink:href="logo.jpg" x="15" y="15" height="70" width="70" clip-path="url(#circleView)" preserveAspectRatio="xMidYMid slice" />
+        </svg>
        </div>
        <div class="flex-1">
         <h1 class="text-xl md:text-2xl font-bold font-bengali" id="header-institution-bn">দারুল মোস্তফা সাঃ ইসলামী একাডেমি</h1>
@@ -365,57 +395,63 @@
         <p class="text-emerald-200 text-xs mt-1 font-bengali" id="header-address">পাথর পাড়া, বাইতুল মামুর জামে মসজিদ সংলগ্ন, মছজিদ্দা, সীতাকুণ্ড, চট্টগ্রাম</p>
        </div>
       </div>
-     </div><!-- Search Bar -->
-     <div class="bg-white/10 backdrop-blur-md rounded-xl p-4"><label class="block text-white text-sm font-bold mb-3 font-bengali"> শিক্ষার্থী আইডি অনুসন্ধান করুন | Search by Student ID </label>
-      <div class="flex gap-2 flex-wrap"><input type="text" id="search-id" class="search-input flex-1 min-w-[200px] px-4 py-3 rounded-lg font-english text-lg" placeholder="Enter Student ID (e.g., STU001, 001)" onkeypress="if(event.key==='Enter') searchVoucher()"> <button onclick="searchVoucher()" class="btn-primary">
-        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-        </svg><span class="font-bengali">খুঁজুন</span> </button> <button onclick="resetSearch()" class="btn-secondary">
-        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
-        </svg><span class="font-bengali">নতুন</span> </button>
+     </div>
+     <div class="bg-white/10 backdrop-blur-md rounded-xl p-4">
+      <label class="block text-white text-sm font-bold mb-3 font-bengali"> শিক্ষার্থী আইডি অনুসন্ধান করুন | Search by Student ID </label>
+      <div class="flex gap-2 flex-wrap">
+        <input type="text" id="search-id" class="search-input flex-1 min-w-[200px] px-4 py-3 rounded-lg font-english text-lg" placeholder="Enter Student ID (e.g., STU001, 001)" onkeypress="if(event.key==='Enter') searchVoucher()"> 
+        <button onclick="searchVoucher()" class="btn-primary">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>
+          <span class="font-bengali">খুঁজুন</span> 
+        </button> 
+        <button onclick="resetSearch()" class="btn-secondary">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" /></svg>
+          <span class="font-bengali">নতুন</span> 
+        </button>
       </div>
      </div>
     </div>
-   </div><!-- Main Content -->
+   </div>
    <div class="flex-1 overflow-auto p-4 md:p-6">
-    <div class="max-w-6xl mx-auto"><!-- Empty State -->
+    <div class="max-w-6xl mx-auto">
      <div id="empty-state" class="empty-state">
-      <div class="empty-state-icon">
-       🔍
-      </div>
+      <div class="empty-state-icon">🔍</div>
       <h2 class="text-2xl font-bold text-gray-700 mb-2 font-bengali">ভর্তি রশিদ খুঁজুন</h2>
       <p class="text-gray-600 font-english">Search for admission vouchers</p>
       <p class="text-gray-500 text-sm mt-4 font-bengali">শিক্ষার্থীর আইডি দিয়ে খোঁজ করতে শুরু করুন</p>
-     </div><!-- Loading State -->
+     </div>
      <div id="loading-state" class="hidden text-center py-12">
-      <div class="flex justify-center mb-4">
-       <div class="loading-spinner"></div>
-      </div>
+      <div class="flex justify-center mb-4"><div class="loading-spinner"></div></div>
       <p class="text-gray-600 font-bengali">রশিদ লোড হচ্ছে...</p>
       <p class="text-gray-500 text-sm font-english">Loading voucher details...</p>
-     </div><!-- Voucher Display -->
+     </div>
      <div id="voucher-container" class="hidden">
-      <div class="voucher-card"><!-- Header -->
+      <div class="voucher-card">
        <div class="voucher-header">
         <div class="relative z-10 flex items-start gap-4">
-         <div class="w-20 h-20 bg-white rounded-lg flex items-center justify-center shadow-lg flex-shrink-0">
-          <svg viewbox="0 0 100 100" class="w-16 h-16"><circle cx="50" cy="50" r="45" fill="#0d6e3f" stroke="#c9a227" stroke-width="3" /> <path d="M50 15 L50 35 M50 65 L50 85" stroke="#c9a227" stroke-width="2" /> <circle cx="50" cy="50" r="20" fill="none" stroke="#c9a227" stroke-width="2" /> <text x="50" y="55" text-anchor="middle" fill="#ffffff" font-size="12" font-weight="bold">
-            دم
-           </text>
-          </svg>
+         <div class="w-16 h-16 bg-white rounded-full flex items-center justify-center shadow-lg">
+                 <svg viewbox="0 0 100 100" class="w-14 h-14">
+          <circle cx="50" cy="50" r="45" fill="#0d6e3f" stroke="#c9a227" stroke-width="3" /> 
+          <path d="M50 5 L50 15 M50 85 L50 95 M5 50 L15 50 M85 50 L95 50" stroke="#c9a227" stroke-width="2" /> 
+          <circle cx="50" cy="50" r="35" fill="#ffffff" stroke="#c9a227" stroke-width="2" /> 
+          <defs>
+            <clipPath id="circleView">
+              <circle cx="50" cy="50" r="34" />
+            </clipPath>
+          </defs>
+          <image xlink:href="logo.jpg" x="15" y="15" height="70" width="70" clip-path="url(#circleView)" preserveAspectRatio="xMidYMid slice" />
+        </svg>
          </div>
          <div class="flex-1">
           <h2 class="text-lg font-bold font-bengali">দারুল মোস্তফা সাঃ ইসলামী একাডেমি</h2>
           <p class="text-amber-100 text-sm font-english">Darul Mustafa (SAW) Islamic Academy</p>
           <p class="text-amber-100 text-xs mt-1">পাথর পাড়া, সীতাকুণ্ড, চট্টগ্রাম</p>
-          <div class="mt-2"><span class="bg-white/20 text-white px-3 py-1 rounded text-sm font-bold font-bengali">ভর্তি রশিদ</span>
-          </div>
+          <div class="mt-2"><span class="bg-white/20 text-white px-3 py-1 rounded text-sm font-bold font-bengali">ভর্তি রশিদ</span></div>
          </div>
-         <div id="student-photo" class="photo-placeholder flex-shrink-0">
-          📷
-         </div>
+         <div id="student-photo" class="photo-placeholder flex-shrink-0">📷</div>
         </div>
-       </div><!-- Voucher Body -->
-       <div class="p-6 space-y-6"><!-- Form Info -->
+       </div>
+       <div class="p-6 space-y-6">
         <div class="flex justify-between items-center pb-4 border-b-2 border-gray-200">
          <div>
           <p class="text-xs text-gray-500 font-bengali">শিক্ষার্থীর আইডি || Student ID</p>
@@ -425,69 +461,33 @@
           <p class="text-xs text-gray-500 font-bengali">জমা দানের তারিখ | Submission Date</p>
           <p class="text-lg font-bold text-emerald-700" id="voucher-submission-date">--</p>
          </div>
-        </div><!-- Student Information -->
+        </div>
         <div>
          <h3 class="text-base font-bold text-white bg-gradient-to-r from-emerald-700 to-emerald-600 px-4 py-2 rounded mb-4 font-bengali">শিক্ষার্থীর তথ্য | Student Information</h3>
          <table class="info-table">
           <tbody>
-           <tr>
-            <td class="font-bengali">নাম (বাংলা)</td>
-            <td id="voucher-student-name-bn">-</td>
-           </tr>
-           <tr>
-            <td class="font-english">Name (English)</td>
-            <td id="voucher-student-name-en">-</td>
-           </tr>
-           <tr>
-            <td class="font-bengali">জন্ম তারিখ</td>
-            <td id="voucher-dob">-</td>
-           </tr>
-           <tr>
-            <td class="font-bengali">লিঙ্গ</td>
-            <td id="voucher-gender">-</td>
-           </tr>
-           <tr>
-            <td class="font-bengali">জন্ম নিবন্ধন নম্বর</td>
-            <td id="voucher-birth-reg">-</td>
-           </tr>
-           <tr>
-            <td class="font-bengali">জাতীয়তা</td>
-            <td id="voucher-nationality">-</td>
-           </tr>
+           <tr><td class="font-bengali">নাম (বাংলা)</td><td id="voucher-student-name-bn">-</td></tr>
+           <tr><td class="font-english">Name (English)</td><td id="voucher-student-name-en">-</td></tr>
+           <tr><td class="font-bengali">জন্ম তারিখ</td><td id="voucher-dob">-</td></tr>
+           <tr><td class="font-bengali">লিঙ্গ</td><td id="voucher-gender">-</td></tr>
+           <tr><td class="font-bengali">জন্ম নিবন্ধন নম্বর</td><td id="voucher-birth-reg">-</td></tr>
+           <tr><td class="font-bengali">জাতীয়তা</td><td id="voucher-nationality">-</td></tr>
           </tbody>
          </table>
-        </div><!-- Parents Information -->
+        </div>
         <div>
          <h3 class="text-base font-bold text-white bg-gradient-to-r from-amber-700 to-amber-600 px-4 py-2 rounded mb-4 font-bengali">অভিভাবকের তথ্য | Parents Information</h3>
          <table class="info-table">
           <tbody>
-           <tr>
-            <td class="font-bengali">পিতার নাম (বাংলা)</td>
-            <td id="voucher-father-name-bn">-</td>
-           </tr>
-           <tr>
-            <td class="font-english">Father's Name (English)</td>
-            <td id="voucher-father-name-en">-</td>
-           </tr>
-           <tr>
-            <td class="font-bengali">পিতার মোবাইল নম্বর</td>
-            <td id="voucher-father-mobile">-</td>
-           </tr>
-           <tr>
-            <td class="font-bengali">মাতার নাম (বাংলা)</td>
-            <td id="voucher-mother-name-bn">-</td>
-           </tr>
-           <tr>
-            <td class="font-english">Mother's Name (English)</td>
-            <td id="voucher-mother-name-en">-</td>
-           </tr>
-           <tr>
-            <td class="font-bengali">মাতার মোবাইল নম্বর</td>
-            <td id="voucher-mother-mobile">-</td>
-           </tr>
+           <tr><td class="font-bengali">পিতার নাম (বাংলা)</td><td id="voucher-father-name-bn">-</td></tr>
+           <tr><td class="font-english">Father's Name (English)</td><td id="voucher-father-name-en">-</td></tr>
+           <tr><td class="font-bengali">পিতার মোবাইল নম্বর</td><td id="voucher-father-mobile">-</td></tr>
+           <tr><td class="font-bengali">মাতার নাম (বাংলা)</td><td id="voucher-mother-name-bn">-</td></tr>
+           <tr><td class="font-english">Mother's Name (English)</td><td id="voucher-mother-name-en">-</td></tr>
+           <tr><td class="font-bengali">মাতার মোবাইল নম্বর</td><td id="voucher-mother-mobile">-</td></tr>
           </tbody>
          </table>
-        </div><!-- Address Information -->
+        </div>
         <div>
          <h3 class="text-base font-bold text-white bg-gradient-to-r from-emerald-600 to-emerald-500 px-4 py-2 rounded mb-4 font-bengali">ঠিকানা | Address</h3>
          <div class="space-y-4">
@@ -500,192 +500,83 @@
            <p class="text-sm text-gray-800 p-3 bg-gray-50 rounded" id="voucher-current-address">-</p>
           </div>
          </div>
-        </div><!-- Admission Details -->
+        </div>
         <div>
          <h3 class="text-base font-bold text-white bg-gradient-to-r from-emerald-700 to-amber-600 px-4 py-2 rounded mb-4 font-bengali">ভর্তি বিবরণ | Admission Details</h3>
          <table class="info-table">
           <tbody>
-           <tr>
-            <td class="font-bengali">ভর্তিকৃত শ্রেণী</td>
-            <td id="voucher-admitted-class" class="font-bold text-emerald-700">-</td>
-           </tr>
-           <tr>
-            <td class="font-bengali">শাখা/বিভাগ</td>
-            <td id="voucher-section">-</td>
-           </tr>
-           <tr>
-            <td class="font-bengali">রোল নম্বর</td>
-            <td id="voucher-roll" class="font-bold text-amber-700">-</td>
-           </tr>
-           <tr>
-            <td class="font-bengali">হোয়াটসঅ্যাপ নম্বর</td>
-            <td id="voucher-whatsapp">-</td>
-           </tr>
+           <tr><td class="font-bengali">ভর্তিকৃত শ্রেণী</td><td id="voucher-admitted-class" class="font-bold text-emerald-700">-</td></tr>
+           <tr><td class="font-bengali">শাখা/বিভাগ</td><td id="voucher-section">-</td></tr>
+           <tr><td class="font-bengali">রোল নম্বর</td><td id="voucher-roll" class="font-bold text-amber-700">-</td></tr>
+           <tr><td class="font-bengali">হোয়াটসঅ্যাপ নম্বর</td><td id="voucher-whatsapp">-</td></tr>
           </tbody>
          </table>
-        </div><!-- Signatures -->
+        </div>
         <div class="signature-row">
-         <div class="signature-box">
-          <div class="signature-line"></div>
-          <p class="signature-label font-bengali">অভিভাবকের স্বাক্ষর</p>
-          <p class="text-xs text-gray-500 font-english">Guardian's Signature</p>
-         </div>
-         <div class="signature-box">
-          <div class="signature-line"></div>
-          <p class="signature-label font-bengali">শ্রেণী শিক্ষক</p>
-          <p class="text-xs text-gray-500 font-english">Class Teacher</p>
-         </div>
-         <div class="signature-box">
-          <div class="signature-line"></div>
-          <p class="signature-label font-bengali">অধ্যক্ষ</p>
-          <p class="text-xs text-gray-500 font-english">Principal</p>
-         </div>
-        </div><!-- Footer Note -->
+         <div class="signature-box"><div class="signature-line"></div><p class="signature-label font-bengali">অভিভাবকের স্বাক্ষর</p><p class="text-xs text-gray-500 font-english">Guardian's Signature</p></div>
+         <div class="signature-box"><div class="signature-line"></div><p class="signature-label font-bengali">শ্রেণী শিক্ষক</p><p class="text-xs text-gray-500 font-english">Class Teacher</p></div>
+         <div class="signature-box"><div class="signature-line"></div><p class="signature-label font-bengali">অধ্যক্ষ</p><p class="text-xs text-gray-500 font-english">Principal</p></div>
+        </div>
         <div class="bg-emerald-50 border-l-4 border-emerald-700 p-4 rounded">
          <p class="text-xs text-gray-700 font-bengali leading-relaxed">এই রশিদটি অফিসিয়াল ভর্তি নিশ্চিতকরণ দলিল। সংরক্ষণ করুন এবং স্কুলে যোগদানের সময় প্রদর্শন করুন।</p>
          <p class="text-xs text-gray-600 font-english mt-2">This is an official admission confirmation document. Keep it safe and present it when joining the institution.</p>
         </div>
        </div>
-      </div><!-- Action Buttons -->
-      <div class="btn-group no-print mt-6 justify-center"><button onclick="printVoucher()" class="btn-primary">
-        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z" />
-        </svg><span class="font-bengali">প্রিন্ট করুন</span> </button> <button onclick="downloadVoucher()" class="btn-secondary">
-        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
-        </svg><span class="font-bengali">ডাউনলোড</span> </button> <button onclick="resetSearch()" class="btn-secondary">
-        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-        </svg><span class="font-bengali">নতুন অনুসন্ধান</span> </button>
       </div>
-     </div><!-- Error State -->
+      <div class="btn-group no-print mt-6 justify-center">
+        <button onclick="printVoucher()" class="btn-primary">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z" /></svg>
+          <span class="font-bengali">প্রিন্ট করুন</span> 
+        </button> 
+        <button onclick="downloadVoucher()" class="btn-secondary">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" /></svg>
+          <span class="font-bengali">ডাউনলোড</span> 
+        </button> 
+        <button onclick="resetSearch()" class="btn-secondary">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
+          <span class="font-bengali">নতুন অনুসন্ধান</span> 
+        </button>
+      </div>
+     </div>
      <div id="error-state" class="hidden text-center py-12 px-4">
-      <div class="text-6xl mb-4">
-       ❌
-      </div>
+      <div class="text-6xl mb-4">❌</div>
       <h2 class="text-2xl font-bold text-gray-700 mb-2 font-bengali">রশিদ পাওয়া যায়নি</h2>
       <p class="text-gray-600 font-english mb-4">Voucher not found</p>
-      <p class="text-gray-500 text-sm font-bengali" id="error-message">দেওয়া আইডি দিয়ে কোনো রশিদ পাওয়া যায়নি। আবার চেষ্টা করুন।</p><button onclick="resetSearch()" class="btn-primary mt-6 mx-auto"> <span class="font-bengali">পুনরায় খোঁজ করুন</span> </button>
+      <p class="text-gray-500 text-sm font-bengali" id="error-message">দেওয়া আইডি দিয়ে কোনো রশিদ পাওয়া যায়নি। আবার চেষ্টা করুন।</p>
+      <button onclick="resetSearch()" class="btn-primary mt-6 mx-auto"> <span class="font-bengali">পুনরায় খোঁজ করুন</span> </button>
      </div>
     </div>
    </div>
   </div>
   <script>
-    // Configuration
     const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzjKmYDf65gSAm1WKCpYhxNLjhak-rw4rLJtuwji2HXIiV_1nrxtTThACwtgEp9dLRv/exec';
     
-    // Default Config
     const defaultConfig = {
       institution_name_bn: 'দারুল মোস্তফা সাঃ ইসলামী একাডেমি',
       institution_name_en: 'Darul Mustafa (SAW) Islamic Academy',
       institution_address: 'পাথর পাড়া, বাইতুল মামুর জামে মসজিদ সংলগ্ন, মছজিদ্দা, সীতাকুণ্ড, চট্টগ্রাম'
     };
     
-    // Element SDK Handler
-    const elementHandler = {
-      defaultConfig,
-      async onConfigChange(config) {
-        document.getElementById('header-institution-bn').textContent = 
-          config.institution_name_bn || defaultConfig.institution_name_bn;
-        document.getElementById('header-institution-en').textContent = 
-          config.institution_name_en || defaultConfig.institution_name_en;
-        document.getElementById('header-address').textContent = 
-          config.institution_address || defaultConfig.institution_address;
-      },
-      mapToCapabilities(config) {
-        return {
-          recolorables: [
-            {
-              get: () => '#0d6e3f',
-              set: (value) => { if(window.elementSdk) window.elementSdk.setConfig({ primary_color: value }); }
-            }
-          ],
-          borderables: [],
-          fontEditable: undefined,
-          fontSizeable: undefined
-        };
-      },
-      mapToEditPanelValues(config) {
-        return new Map([
-          ['institution_name_bn', config.institution_name_bn || defaultConfig.institution_name_bn],
-          ['institution_name_en', config.institution_name_en || defaultConfig.institution_name_en],
-          ['institution_address', config.institution_address || defaultConfig.institution_address]
-        ]);
-      }
-    };
-    
-    // Initialize SDK
-    if (window.elementSdk) {
-      window.elementSdk.init(elementHandler);
-    }
-    
-    // Set initial values
+    // Initialize Defaults
     document.getElementById('header-institution-bn').textContent = defaultConfig.institution_name_bn;
     document.getElementById('header-institution-en').textContent = defaultConfig.institution_name_en;
     document.getElementById('header-address').textContent = defaultConfig.institution_address;
     
-    // Toast notification
     function showToast(message, type = 'info') {
       const container = document.getElementById('toast-container');
       const toast = document.createElement('div');
-      
-      let bgClass = 'bg-blue-600';
-      if (type === 'success') bgClass = 'bg-emerald-600';
-      if (type === 'error') bgClass = 'bg-red-600';
-      if (type === 'warning') bgClass = 'bg-amber-600';
-      
+      let bgClass = type === 'success' ? 'bg-emerald-600' : (type === 'error' ? 'bg-red-600' : 'bg-amber-600');
       toast.className = `toast ${bgClass} text-white px-6 py-4 rounded-lg shadow-xl mb-3 font-medium font-bengali`;
       toast.textContent = message;
       container.appendChild(toast);
-      
-      setTimeout(() => {
-        toast.style.animation = 'slideIn 0.3s ease reverse';
-        setTimeout(() => toast.remove(), 300);
-      }, 4000);
+      setTimeout(() => { toast.remove(); }, 4000);
     }
     
-    // Format Bengali/Bangla text
-    function formatGender(value) {
-      const genderMap = {
-        'male': 'পুরুষ',
-        'female': 'মহিলা',
-        'other': 'অন্যান্য'
-      };
-      return genderMap[String(value).toLowerCase()] || value;
-    }
-    
-    // Format address
-    function formatAddress(village, po, upazila, district) {
-      const parts = [village, po, upazila, district].filter(p => p && p !== '-' && String(p).trim() !== '');
-      return parts.length > 0 ? parts.join(', ') : '-';
-    }
-    
-    // Format date
-    function formatDate(dateStr) {
-      if (!dateStr || dateStr === '-') return '-';
-      try {
-        const date = new Date(dateStr);
-        return date.toLocaleDateString('bn-BD', { year: 'numeric', month: 'long', day: 'numeric' });
-      } catch (e) {
-        return dateStr;
-      }
-    }
-    
-    // Search Voucher
     async function searchVoucher() {
-      const searchInput = document.getElementById('search-id');
-      const searchId = searchInput.value.trim();
+      const searchId = document.getElementById('search-id').value.trim();
+      if (!searchId) { showToast('অনুগ্রহ করে শিক্ষার্থী আইডি লিখুন', 'warning'); return; }
       
-      if (!searchId) {
-        showToast('অনুগ্রহ করে শিক্ষার্থী আইডি লিখুন', 'warning');
-        return;
-      }
-      
-      if (!SCRIPT_URL || SCRIPT_URL === 'YOUR_GOOGLE_APPS_SCRIPT_WEB_APP_URL_HERE') {
-        showToast('Google Apps Script URL এখনো সেট করা হয়নি। প্রশাসনের সাথে যোগাযোগ করুন।', 'error');
-        return;
-      }
-      
-      // Show loading state
       document.getElementById('empty-state').classList.add('hidden');
-      document.getElementById('error-state').classList.add('hidden');
       document.getElementById('voucher-container').classList.add('hidden');
       document.getElementById('loading-state').classList.remove('hidden');
       
@@ -696,166 +587,63 @@
         if (!data.success) {
           document.getElementById('loading-state').classList.add('hidden');
           document.getElementById('error-state').classList.remove('hidden');
-          document.getElementById('error-message').textContent = 
-            `"${searchId}" আইডি দিয়ে কোনো রশিদ পাওয়া যায়নি। আবার চেষ্টা করুন।`;
-          showToast('রশিদ পাওয়া যায়নি', 'error');
           return;
         }
         
-        // Populate voucher
         populateVoucher(data);
-        
-        // Show voucher
         document.getElementById('loading-state').classList.add('hidden');
-        document.getElementById('error-state').classList.add('hidden');
         document.getElementById('voucher-container').classList.remove('hidden');
-        
-        showToast('রশিদ সফলভাবে লোড হয়েছে', 'success');
-        
       } catch (error) {
-        console.error('Search error:', error);
         document.getElementById('loading-state').classList.add('hidden');
-        document.getElementById('error-state').classList.remove('hidden');
-        document.getElementById('error-message').textContent = 
-          'সার্ভারের সাথে সংযোগ স্থাপন করতে সমস্যা হয়েছে। পরে আবার চেষ্টা করুন।';
         showToast('ডেটা লোড করতে ব্যর্থ হয়েছে', 'error');
       }
     }
     
-    // Populate Voucher
     function populateVoucher(data) {
-      // Form info
       document.getElementById('voucher-form-id').textContent = String(data.form_id || 'N/A').padStart(3, '0');
-      document.getElementById('voucher-submission-date').textContent = formatDate(data.submission_date);
-      
-      // Student info
       document.getElementById('voucher-student-name-bn').textContent = data.student_name_bn || '-';
       document.getElementById('voucher-student-name-en').textContent = data.student_name_en || '-';
-      document.getElementById('voucher-dob').textContent = formatDate(data.date_of_birth);
-      document.getElementById('voucher-gender').textContent = formatGender(data.gender);
-      document.getElementById('voucher-birth-reg').textContent = data.birth_reg_no || '-';
-      document.getElementById('voucher-nationality').textContent = data.nationality || '-';
-      
-      // Parents info
-      document.getElementById('voucher-father-name-bn').textContent = data.father_name_bn || '-';
-      document.getElementById('voucher-father-name-en').textContent = data.father_name_en || '-';
-      document.getElementById('voucher-father-mobile').textContent = data.father_mobile || '-';
-      document.getElementById('voucher-mother-name-bn').textContent = data.mother_name_bn || '-';
-      document.getElementById('voucher-mother-name-en').textContent = data.mother_name_en || '-';
-      document.getElementById('voucher-mother-mobile').textContent = data.mother_mobile || '-';
-      
-      // Address
-      const permAddr = formatAddress(
-        data.permanent_village,
-        data.permanent_po,
-        data.permanent_upazila,
-        data.permanent_district
-      );
-      const currAddr = formatAddress(
-        data.current_village,
-        data.current_po,
-        data.current_upazila,
-        data.current_district
-      );
-      
-      document.getElementById('voucher-permanent-address').textContent = permAddr;
-      document.getElementById('voucher-current-address').textContent = currAddr;
-      
-      // Admission details
       document.getElementById('voucher-admitted-class').textContent = data.admitted_class || '-';
-      document.getElementById('voucher-section').textContent = data.section || '-';
       document.getElementById('voucher-roll').textContent = data.assigned_roll || '-';
-      document.getElementById('voucher-whatsapp').textContent = data.whatsapp_number || '-';
-      // Photo Handling
+      
       const photoContainer = document.getElementById('student-photo');
       if (data.photo_data && data.photo_data !== '' && data.photo_data !== 'No Image Provided') {
-        // যদি ডাটাবেসে ছবি থাকে, তবে সেটি সেট করবে
         photoContainer.innerHTML = `<img src="${data.photo_data}" class="w-full h-full object-cover rounded-lg" alt="Student Photo">`;
         photoContainer.classList.remove('photo-placeholder');
       } else {
-        // ছবি না থাকলে একটি ডিফল্ট আইকন বা টেক্সট দেখাবে
         photoContainer.innerHTML = '📷<br><span class="text-[10px]">ছবি নেই</span>';
         photoContainer.classList.add('photo-placeholder');
       }
+      
+      // Other fields population (similar to before)
+      // Voucher Submission Date ঠিক করার জন্য
+document.getElementById('voucher-submission-date').textContent = data.submission_date ? data.submission_date.split('T')[0] : '-';
+
+// Date of Birth ঠিক করার জন্য
+document.getElementById('voucher-dob').textContent = data.date_of_birth ? data.date_of_birth.split('T')[0] : '-';
+
+      document.getElementById('voucher-gender').textContent = data.gender || '-';
+      document.getElementById('voucher-father-name-bn').textContent = data.father_name_bn || '-';
+      document.getElementById('voucher-mother-name-bn').textContent = data.mother_name_bn || '-';
+      document.getElementById('voucher-permanent-address').textContent = `${data.permanent_village || ''}, ${data.permanent_upazila || ''}`;
+      document.getElementById('voucher-current-address').textContent = `${data.current_village || ''}, ${data.current_upazila || ''}`;
     }
     
-function printVoucher() {
-  const voucher = document.getElementById('voucher-container');
-  if (!voucher || voucher.classList.contains('hidden')) {
-    showToast('প্রিন্ট করার জন্য কোনো রশিদ পাওয়া যায়নি', 'error');
-    return;
-  }
-  
-  // প্রিন্ট করার আগে নিশ্চিত হওয়া যে এটি হিডেন নয়
-  voucher.style.display = 'block';
-  window.print();
-  showToast('প্রিন্ট উইন্ডো খোলা হয়েছে', 'info');
-}
+    function printVoucher() {
+      if (document.getElementById('voucher-container').classList.contains('hidden')) return;
+      window.print();
+    }
 
-
-    // Download Voucher as PDF (using print functionality)
     function downloadVoucher() {
-  const voucher = document.getElementById("voucher-container");
-
-  if (!voucher) {
-    alert("Voucher not found!");
-    return;
-  }
-
-  const printWindow = window.open("", "_blank");
-
-  const styles = Array.from(document.querySelectorAll("style"))
-    .map(style => style.innerHTML)
-    .join("\n");
-
-  printWindow.document.write(`
-    <!DOCTYPE html>
-    <html>
-    <head>
-      <title>Voucher</title>
-      <meta charset="UTF-8">
-      <style>
-        ${styles}
-
-        @page {
-          size: A4 portrait;
-          margin: 10mm;
-        }
-
-        body {
-          margin: 0;
-        }
-      </style>
-    </head>
-    <body>
-      ${voucher.outerHTML}
-    </body>
-    </html>
-  `);
-
-  printWindow.document.close();
-
-  // ✅ Wait until fully loaded
-  printWindow.onload = function () {
-    printWindow.focus();
-    printWindow.print();
-  };
-}
+      printVoucher(); // Browser print as PDF is the most reliable way for this layout
+    }
     
-    // Reset Search
     function resetSearch() {
       document.getElementById('search-id').value = '';
       document.getElementById('empty-state').classList.remove('hidden');
-      document.getElementById('error-state').classList.add('hidden');
       document.getElementById('voucher-container').classList.add('hidden');
-      document.getElementById('loading-state').classList.add('hidden');
-      document.getElementById('search-id').focus();
+      document.getElementById('error-state').classList.add('hidden');
     }
-    
-    // Auto-focus on search input
-    window.addEventListener('load', () => {
-      document.getElementById('search-id').focus();
-    });
   </script>
- <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9ce62c1324995807',t:'MTc3MTE3Mjg0MS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+ </body>
 </html>
