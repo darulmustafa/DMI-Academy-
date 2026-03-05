@@ -1,0 +1,758 @@
+<!doctype html>
+<html lang="bn" class="h-full">
+ <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>আয় ও ব্যয় রশিদ | Income &amp; Expense Voucher - দারুল মোস্তফা সাঃ ইসলামী একাডেমি</title>
+  <script src="https://cdn.tailwindcss.com/3.4.17"></script>
+  <script src="/_sdk/element_sdk.js"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@300;400;500;600;700&amp;family=Poppins:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary-green: #0d6e3f;
+      --secondary-gold: #c9a227;
+      --dark-text: #1a1a2e;
+      --light-bg: #f8f9fa;
+      --card-bg: #ffffff;
+    }
+    
+    * {
+      font-family: 'Hind Siliguri', 'Poppins', sans-serif;
+    }
+    
+    .font-bengali {
+      font-family: 'Hind Siliguri', sans-serif;
+    }
+    
+    .font-english {
+      font-family: 'Poppins', sans-serif;
+    }
+    
+    html, body {
+      height: 100%;
+    }
+    
+    body {
+      background: linear-gradient(135deg, #f0fdf4 0%, #fef3c7 100%);
+    }
+    
+    .search-container {
+      background: linear-gradient(135deg, rgba(13, 110, 63, 0.95) 0%, rgba(201, 162, 39, 0.95) 100%);
+      backdrop-filter: blur(10px);
+      box-shadow: 0 8px 32px rgba(13, 110, 63, 0.2);
+    }
+    
+    .search-input {
+      transition: all 0.3s ease;
+      border: 2px solid rgba(255, 255, 255, 0.3);
+      background: rgba(255, 255, 255, 0.95);
+    }
+    
+    .search-input:focus {
+      border-color: white;
+      box-shadow: 0 0 20px rgba(201, 162, 39, 0.5);
+      outline: none;
+    }
+    
+    .voucher-card {
+      background: linear-gradient(135deg, #ffffff 0%, #f8fdf9 100%);
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+      border-radius: 12px;
+      overflow: hidden;
+      animation: slideUp 0.5s ease;
+    }
+    
+    @keyframes slideUp {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    
+    .voucher-header {
+      background: linear-gradient(135deg, #0d6e3f 0%, #1a8f5c 50%, #c9a227 100%);
+      padding: 24px;
+      color: white;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .voucher-header::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      right: -50%;
+      width: 300px;
+      height: 300px;
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 50%;
+    }
+    
+    .info-section {
+      border-left: 4px solid var(--primary-green);
+      padding-left: 16px;
+      margin: 12px 0;
+    }
+    
+    .info-label {
+      font-weight: 600;
+      color: #4b5563;
+      font-size: 0.85rem;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    
+    .info-value {
+      font-size: 1rem;
+      color: var(--dark-text);
+      font-weight: 500;
+      margin-top: 4px;
+    }
+    
+    .info-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 12px 0;
+    }
+    
+    .info-table td {
+      padding: 10px 12px;
+      border-bottom: 1px solid #e5e7eb;
+    }
+    
+    .info-table td:first-child {
+      background-color: #f3f4f6;
+      font-weight: 600;
+      width: 40%;
+      color: var(--primary-green);
+    }
+    
+    .info-table tr:last-child td {
+      border-bottom: none;
+    }
+    
+    .loading-spinner {
+      border: 3px solid #f3f3f3;
+      border-top: 3px solid var(--primary-green);
+      border-radius: 50%;
+      width: 32px;
+      height: 32px;
+      animation: spin 1s linear infinite;
+    }
+    
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+    
+    .photo-placeholder {
+      width: 120px;
+      height: 150px;
+      background: linear-gradient(135deg, #e5e7eb 0%, #d1d5db 100%);
+      border: 2px solid #9ca3af;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #6b7280;
+      font-size: 0.85rem;
+      text-align: center;
+      flex-direction: column;
+    }
+    
+    .toast {
+      animation: slideIn 0.3s ease;
+    }
+    
+    @keyframes slideIn {
+      from {
+        transform: translateX(100%);
+        opacity: 0;
+      }
+      to {
+        transform: translateX(0);
+        opacity: 1;
+      }
+    }
+    
+    .btn-group {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+    
+    .btn-primary {
+      background: linear-gradient(135deg, var(--primary-green) 0%, #1a8f5c 100%);
+      color: white;
+      padding: 12px 24px;
+      border-radius: 8px;
+      border: none;
+      cursor: pointer;
+      font-weight: 600;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    
+    .btn-primary:hover {
+      box-shadow: 0 8px 16px rgba(13, 110, 63, 0.3);
+      transform: translateY(-2px);
+    }
+    
+    .btn-secondary {
+      background: linear-gradient(135deg, #6b7280 0%, #4b5563 100%);
+      color: white;
+      padding: 12px 24px;
+      border-radius: 8px;
+      border: none;
+      cursor: pointer;
+      font-weight: 600;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    
+    .btn-secondary:hover {
+      box-shadow: 0 8px 16px rgba(75, 85, 99, 0.3);
+      transform: translateY(-2px);
+    }
+    
+    .btn-primary:disabled, .btn-secondary:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+      transform: none;
+    }
+    
+    .empty-state {
+      text-align: center;
+      padding: 60px 20px;
+      color: #6b7280;
+    }
+    
+    .empty-state-icon {
+      font-size: 64px;
+      margin-bottom: 16px;
+      opacity: 0.5;
+    }
+    
+    .signature-row {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 20px;
+      margin-top: 30px;
+      padding-top: 20px;
+      border-top: 2px dashed #d1d5db;
+    }
+    
+    .signature-box {
+      text-align: center;
+    }
+    
+    .signature-line {
+      border-bottom: 2px solid #000;
+      height: 80px;
+      margin-bottom: 8px;
+    }
+    
+    .signature-label {
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--dark-text);
+    }
+    
+    @media print {
+      body {
+        background: white !important;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+      }
+      
+      .no-print {
+        display: none !important;
+      }
+      
+      .voucher-card {
+        box-shadow: none !important;
+        border: 2px solid #000 !important;
+        page-break-inside: avoid;
+      }
+      
+      .voucher-header {
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+      }
+      
+      .info-table td {
+        border: 1px solid #000 !important;
+      }
+      
+      .search-container {
+        display: none !important;
+      }
+    }
+    
+    .shimmer {
+      background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+      background-size: 200% 100%;
+      animation: shimmer 2s infinite;
+    }
+    
+    @keyframes shimmer {
+      0% { background-position: 200% 0; }
+      100% { background-position: -200% 0; }
+    }
+  </style>
+  <style>body { box-sizing: border-box; }</style>
+  <script src="/_sdk/data_sdk.js" type="text/javascript"></script>
+ </head>
+ <body class="h-full overflow-auto">
+  <div id="app" class="h-full flex flex-col"><!-- Toast Container -->
+   <div id="toast-container" class="fixed top-4 right-4 z-50 max-w-sm"></div><!-- Header & Filters -->
+   <div class="search-container sticky top-0 z-40 no-print">
+    <div class="max-w-6xl mx-auto p-4 md:p-6"><!-- Institution Header -->
+     <div class="mb-6 text-white">
+      <div class="flex items-center gap-3 mb-3">
+       <div class="w-16 h-16 bg-white rounded-full flex items-center justify-center shadow-lg">
+        <svg viewbox="0 0 100 100" class="w-14 h-14"><circle cx="50" cy="50" r="45" fill="#0d6e3f" stroke="#c9a227" stroke-width="3" /> <path d="M50 15 L50 35 M50 65 L50 85" stroke="#c9a227" stroke-width="2" /> <circle cx="50" cy="50" r="20" fill="none" stroke="#c9a227" stroke-width="2" /> <text x="50" y="55" text-anchor="middle" fill="#ffffff" font-size="12" font-weight="bold">
+          دم
+         </text>
+        </svg>
+       </div>
+       <div class="flex-1">
+        <h1 class="text-xl md:text-2xl font-bold font-bengali" id="header-institution-bn">দারুল মোস্তফা সাঃ ইসলামী একাডেমি</h1>
+        <p class="text-emerald-100 text-sm font-english" id="header-institution-en">Darul Mustafa (SAW) Islamic Academy</p>
+        <p class="text-emerald-200 text-xs mt-1 font-bengali" id="header-address">পাথর পাড়া, বাইতুল মামুর জামে মসজিদ সংলগ্ন, মছজিদ্দা, সীতাকুণ্ড, চট্টগ্রাম</p>
+       </div>
+      </div>
+     </div><!-- Filter Section -->
+     <div class="bg-white/10 backdrop-blur-md rounded-xl p-4"><label class="block text-white text-sm font-bold mb-3 font-bengali">আয় ও ব্যয় রশিদ তৈরি করুন | Create Income &amp; Expense Voucher</label>
+      <div class="flex gap-3 flex-wrap items-end">
+       <div class="flex-1 min-w-[200px]"><label class="text-white text-xs font-semibold mb-1 block font-bengali">ধরন নির্বাচন করুন | Select Type</label> <select id="type-filter" class="search-input w-full px-4 py-3 rounded-lg font-english"> <option value="">-- Select Type --</option> <option value="Income">Income (আয়)</option> <option value="Expense">Expense (ব্যয়)</option> </select>
+       </div>
+       <div class="flex-1 min-w-[200px]"><label class="text-white text-xs font-semibold mb-1 block font-bengali">তারিখ নির্বাচন করুন | Select Date</label> <input type="date" id="date-filter" class="search-input w-full px-4 py-3 rounded-lg font-english">
+       </div><button onclick="generateVoucher()" class="btn-primary">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8m0 8l-9-2m9 2l9-2m-9-8l-9 18m9-18l9-2" />
+        </svg><span class="font-bengali">রশিদ তৈরি করুন</span> </button> <button onclick="resetFilters()" class="btn-secondary">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+        </svg><span class="font-bengali">নতুন</span> </button>
+      </div>
+     </div>
+    </div>
+   </div><!-- Main Content -->
+   <div class="flex-1 overflow-auto p-4 md:p-6">
+    <div class="max-w-4xl mx-auto"><!-- Empty State -->
+     <div id="empty-state" class="empty-state">
+      <div class="empty-state-icon">
+       📊
+      </div>
+      <h2 class="text-2xl font-bold text-gray-700 mb-2 font-bengali">আয় ও ব্যয় রশিদ তৈরি করুন</h2>
+      <p class="text-gray-600 font-english">Generate Income &amp; Expense Voucher</p>
+      <p class="text-gray-500 text-sm mt-4 font-bengali">উপরে থেকে ধরন এবং তারিখ নির্বাচন করে শুরু করুন</p>
+     </div><!-- Loading State -->
+     <div id="loading-state" class="hidden text-center py-12">
+      <div class="flex justify-center mb-4">
+       <div class="loading-spinner"></div>
+      </div>
+      <p class="text-gray-600 font-bengali">রশিদ তৈরি হচ্ছে...</p>
+      <p class="text-gray-500 text-sm font-english">Generating voucher...</p>
+     </div><!-- Voucher Display -->
+     <div id="voucher-container" class="hidden">
+      <div class="voucher-card"><!-- Header -->
+       <div class="voucher-header">
+        <div class="relative z-10 flex items-start gap-4">
+         <div class="w-20 h-20 bg-white rounded-lg flex items-center justify-center shadow-lg flex-shrink-0">
+          <svg viewbox="0 0 100 100" class="w-16 h-16"><circle cx="50" cy="50" r="45" fill="#0d6e3f" stroke="#c9a227" stroke-width="3" /> <path d="M50 15 L50 35 M50 65 L50 85" stroke="#c9a227" stroke-width="2" /> <circle cx="50" cy="50" r="20" fill="none" stroke="#c9a227" stroke-width="2" /> <text x="50" y="55" text-anchor="middle" fill="#ffffff" font-size="12" font-weight="bold">
+            دم
+           </text>
+          </svg>
+         </div>
+         <div class="flex-1">
+          <h2 class="text-lg font-bold font-bengali" id="voucher-institution-bn">দারুল মোস্তফা সাঃ ইসলামী একাডেমি</h2>
+          <p class="text-amber-100 text-sm font-english" id="voucher-institution-en">Darul Mustafa (SAW) Islamic Academy</p>
+          <p class="text-amber-100 text-xs mt-1" id="voucher-institution-addr">পাথর পাড়া, সীতাকুণ্ড, চট্টগ্রাম</p>
+          <div class="mt-2"><span class="bg-white/20 text-white px-3 py-1 rounded text-sm font-bold font-bengali" id="voucher-type-badge">আয় রশিদ</span>
+          </div>
+         </div>
+         <div class="text-right text-white">
+          <p class="text-xs opacity-90 font-bengali">তারিখ | Date</p>
+          <p class="text-lg font-bold" id="voucher-date">--</p>
+         </div>
+        </div>
+       </div><!-- Voucher Body -->
+       <div class="p-6"><!-- Data Table -->
+        <div class="overflow-x-auto mb-6">
+         <table class="w-full border-collapse">
+          <thead>
+           <tr class="bg-emerald-700">
+            <th class="border-2 border-emerald-700 p-3 text-white text-center font-bengali text-sm">ক্রম | Serial</th>
+            <th class="border-2 border-emerald-700 p-3 text-white text-left font-bengali text-sm">খাত / বিবরণ | Item</th>
+            <th class="border-2 border-emerald-700 p-3 text-white text-right font-bengali text-sm">পরিমাণ | Amount</th>
+           </tr>
+          </thead>
+          <tbody id="voucher-table-body"><!-- Populated dynamically -->
+          </tbody>
+          <tfoot>
+           <tr class="bg-amber-50 font-bold">
+            <td colspan="2" class="border-2 border-amber-700 p-3 text-right text-amber-900 font-bengali">মোট | Total:</td>
+            <td class="border-2 border-amber-700 p-3 text-right text-amber-900 font-english text-lg" id="voucher-total">৳ 0.00</td>
+           </tr>
+          </tfoot>
+         </table>
+        </div><!-- Amount in Words -->
+        <div class="bg-blue-50 border-l-4 border-blue-700 p-4 rounded mb-6">
+         <p class="text-xs font-bold text-blue-900 font-bengali mb-1">মোট অর্থ (শব্দে) | Amount in Words:</p>
+         <p class="text-sm text-blue-900 font-english" id="voucher-amount-words">Zero Taka Only</p>
+        </div><!-- Footer Note -->
+        <div class="bg-emerald-50 border-l-4 border-emerald-700 p-4 rounded">
+         <p class="text-xs text-gray-700 font-bengali leading-relaxed">এই রশিদটি অফিসিয়াল আয় ও ব্যয় নথি। সংরক্ষণ করুন এবং প্রয়োজনে প্রদর্শন করুন।</p>
+         <p class="text-xs text-gray-600 font-english mt-2">This is an official income &amp; expense document. Keep it for records.</p>
+        </div><!-- Signatures -->
+        <div class="signature-row">
+         <div class="signature-box">
+          <div class="signature-line"></div>
+          <p class="signature-label font-bengali">প্রস্তুতকারক</p>
+          <p class="text-xs text-gray-500 font-english">Prepared By</p>
+         </div>
+         <div class="signature-box">
+          <div class="signature-line"></div>
+          <p class="signature-label font-bengali">পরিদর্শক</p>
+          <p class="text-xs text-gray-500 font-english">Verified By</p>
+         </div>
+         <div class="signature-box">
+          <div class="signature-line"></div>
+          <p class="signature-label font-bengali">অনুমোদক</p>
+          <p class="text-xs text-gray-500 font-english">Approved By</p>
+         </div>
+        </div>
+       </div>
+      </div><!-- Action Buttons -->
+      <div class="btn-group no-print mt-6 justify-center"><button onclick="printVoucher()" class="btn-primary">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z" />
+        </svg><span class="font-bengali">প্রিন্ট করুন</span> </button> <button onclick="downloadVoucher()" class="btn-secondary">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+        </svg><span class="font-bengali">ডাউনলোড</span> </button> <button onclick="resetFilters()" class="btn-secondary">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+        </svg><span class="font-bengali">নতুন রশিদ</span> </button>
+      </div>
+     </div><!-- Error State -->
+     <div id="error-state" class="hidden text-center py-12 px-4">
+      <div class="text-6xl mb-4">
+       ❌
+      </div>
+      <h2 class="text-2xl font-bold text-gray-700 mb-2 font-bengali">কোনো ডেটা পাওয়া যায়নি</h2>
+      <p class="text-gray-600 font-english mb-4">No Data Found</p>
+      <p class="text-gray-500 text-sm font-bengali" id="error-message">নির্বাচিত তারিখে এই ধরনের কোনো লেনদেন নেই।</p><button onclick="resetFilters()" class="btn-primary mt-6 mx-auto"> <span class="font-bengali">পুনরায় চেষ্টা করুন</span> </button>
+     </div>
+    </div>
+   </div>
+  </div>
+
+  <script>
+    // Configuration
+    const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyF8Qlq36ssBFhnVH789tmTaZkoBuAchjbAEKvj64Etrfpp71Dj05PuNn1DBA3ZDUydwQ/exec';
+    
+    // Default Config
+    const defaultConfig = {
+      institution_name_bn: 'দারুল মোস্তফা সাঃ ইসলামী একাডেমি',
+      institution_name_en: 'Darul Mustafa (SAW) Islamic Academy',
+      institution_address: 'পাথর পাড়া, বাইতুল মামুর জামে মসজিদ সংলগ্ন, মছজিদ্দা, সীতাকুণ্ড, চট্টগ্রাম'
+    };
+    
+    // Element SDK Handler
+    const elementHandler = {
+      defaultConfig,
+      async onConfigChange(config) {
+        document.getElementById('header-institution-bn').textContent = 
+          config.institution_name_bn || defaultConfig.institution_name_bn;
+        document.getElementById('header-institution-en').textContent = 
+          config.institution_name_en || defaultConfig.institution_name_en;
+        document.getElementById('header-address').textContent = 
+          config.institution_address || defaultConfig.institution_address;
+      },
+      mapToCapabilities(config) {
+        return {
+          recolorables: [
+            {
+              get: () => '#0d6e3f',
+              set: (value) => { if(window.elementSdk) window.elementSdk.setConfig({ primary_color: value }); }
+            }
+          ],
+          borderables: [],
+          fontEditable: undefined,
+          fontSizeable: undefined
+        };
+      },
+      mapToEditPanelValues(config) {
+        return new Map([
+          ['institution_name_bn', config.institution_name_bn || defaultConfig.institution_name_bn],
+          ['institution_name_en', config.institution_name_en || defaultConfig.institution_name_en],
+          ['institution_address', config.institution_address || defaultConfig.institution_address]
+        ]);
+      }
+    };
+    
+    // Initialize SDK
+    if (window.elementSdk) {
+      window.elementSdk.init(elementHandler);
+    }
+    
+    // Set initial values
+    document.getElementById('header-institution-bn').textContent = defaultConfig.institution_name_bn;
+    document.getElementById('header-institution-en').textContent = defaultConfig.institution_name_en;
+    document.getElementById('header-address').textContent = defaultConfig.institution_address;
+    
+    // Toast notification
+    function showToast(message, type = 'info') {
+      const container = document.getElementById('toast-container');
+      const toast = document.createElement('div');
+      
+      let bgClass = 'bg-blue-600';
+      if (type === 'success') bgClass = 'bg-emerald-600';
+      if (type === 'error') bgClass = 'bg-red-600';
+      if (type === 'warning') bgClass = 'bg-amber-600';
+      
+      toast.className = `toast ${bgClass} text-white px-6 py-4 rounded-lg shadow-xl mb-3 font-medium font-bengali`;
+      toast.textContent = message;
+      container.appendChild(toast);
+      
+      setTimeout(() => {
+        toast.style.animation = 'slideIn 0.3s ease reverse';
+        setTimeout(() => toast.remove(), 300);
+      }, 4000);
+    }
+    
+    // Format date for display
+    function formatDateDisplay(dateStr) {
+      if (!dateStr) return '--';
+      try {
+        const date = new Date(dateStr + 'T00:00:00');
+        return date.toLocaleDateString('bn-BD', { year: 'numeric', month: 'long', day: 'numeric' });
+      } catch (e) {
+        return dateStr;
+      }
+    }
+    
+    // Convert number to Bengali words
+    function numberToWords(num) {
+      const ones = ['', 'One', 'Two', 'Three', 'Four', 'Five', 'Six', 'Seven', 'Eight', 'Nine'];
+      const teens = ['Ten', 'Eleven', 'Twelve', 'Thirteen', 'Fourteen', 'Fifteen', 'Sixteen', 'Seventeen', 'Eighteen', 'Nineteen'];
+      const tens = ['', '', 'Twenty', 'Thirty', 'Forty', 'Fifty', 'Sixty', 'Seventy', 'Eighty', 'Ninety'];
+      
+      function convertBelowThousand(n) {
+        if (n === 0) return '';
+        if (n < 10) return ones[n];
+        if (n < 20) return teens[n - 10];
+        if (n < 100) return tens[Math.floor(n / 10)] + (n % 10 !== 0 ? ' ' + ones[n % 10] : '');
+        return ones[Math.floor(n / 100)] + ' Hundred' + (n % 100 !== 0 ? ' ' + convertBelowThousand(n % 100) : '');
+      }
+      
+      if (num === 0) return 'Zero';
+      
+      const crore = Math.floor(num / 10000000);
+      const lakh = Math.floor((num % 10000000) / 100000);
+      const thousand = Math.floor((num % 100000) / 1000);
+      const remaining = num % 1000;
+      
+      let result = '';
+      if (crore > 0) result += convertBelowThousand(crore) + ' Crore ';
+      if (lakh > 0) result += convertBelowThousand(lakh) + ' Lakh ';
+      if (thousand > 0) result += convertBelowThousand(thousand) + ' Thousand ';
+      if (remaining > 0) result += convertBelowThousand(remaining) + ' ';
+      
+      return result.trim() + ' Taka Only';
+    }
+    
+    // Format currency
+    function formatCurrency(amount) {
+      return '৳ ' + parseFloat(amount).toLocaleString('en-BD', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    }
+    
+    // Generate Voucher
+    async function generateVoucher() {
+      const typeFilter = document.getElementById('type-filter').value;
+      const dateFilter = document.getElementById('date-filter').value;
+      
+      if (!typeFilter) {
+        showToast('অনুগ্রহ করে ধরন নির্বাচন করুন', 'warning');
+        return;
+      }
+      
+      if (!dateFilter) {
+        showToast('অনুগ্রহ করে তারিখ নির্বাচন করুন', 'warning');
+        return;
+      }
+      
+      if (!SCRIPT_URL || SCRIPT_URL === 'YOUR_GOOGLE_APPS_SCRIPT_WEB_APP_URL_HERE') {
+        showToast('Google Apps Script URL এখনো সেট করা হয়নি', 'error');
+        return;
+      }
+      
+      // Show loading state
+      document.getElementById('empty-state').classList.add('hidden');
+      document.getElementById('error-state').classList.add('hidden');
+      document.getElementById('voucher-container').classList.add('hidden');
+      document.getElementById('loading-state').classList.remove('hidden');
+      
+      try {
+        const response = await fetch(`${SCRIPT_URL}?type=${encodeURIComponent(typeFilter)}&date=${encodeURIComponent(dateFilter)}`);
+        const data = await response.json();
+        
+        if (!data.success || !data.items || data.items.length === 0) {
+          document.getElementById('loading-state').classList.add('hidden');
+          document.getElementById('error-state').classList.remove('hidden');
+          showToast('নির্বাচিত তারিখে কোনো লেনদেন পাওয়া যায়নি', 'warning');
+          return;
+        }
+        
+        // Populate voucher
+        populateVoucher(data, typeFilter, dateFilter);
+        
+        // Show voucher
+        document.getElementById('loading-state').classList.add('hidden');
+        document.getElementById('error-state').classList.add('hidden');
+        document.getElementById('voucher-container').classList.remove('hidden');
+        
+        showToast('রশিদ সফলভাবে তৈরি হয়েছে', 'success');
+        
+      } catch (error) {
+        console.error('Error:', error);
+        document.getElementById('loading-state').classList.add('hidden');
+        document.getElementById('error-state').classList.remove('hidden');
+        showToast('ডেটা লোড করতে ব্যর্থ হয়েছে', 'error');
+      }
+    }
+    
+    // Populate Voucher
+    function populateVoucher(data, type, date) {
+      // Update header info
+      document.getElementById('voucher-institution-bn').textContent = 
+        window.elementSdk?.config?.institution_name_bn || defaultConfig.institution_name_bn;
+      document.getElementById('voucher-institution-en').textContent = 
+        window.elementSdk?.config?.institution_name_en || defaultConfig.institution_name_en;
+      document.getElementById('voucher-institution-addr').textContent = 
+        window.elementSdk?.config?.institution_address || defaultConfig.institution_address;
+      
+      // Update type badge
+      const typeBadge = document.getElementById('voucher-type-badge');
+      if (type === 'Income') {
+        typeBadge.textContent = 'আয় রশিদ';
+        typeBadge.parentElement.className = 'mt-2';
+      } else {
+        typeBadge.textContent = 'ব্যয় রশিদ';
+      }
+      
+      // Update date
+      document.getElementById('voucher-date').textContent = formatDateDisplay(date);
+      
+      // Group items and sum amounts
+      const itemMap = {};
+      data.items.forEach(item => {
+        const key = item.item_name;
+        if (!itemMap[key]) {
+          itemMap[key] = 0;
+        }
+        itemMap[key] += parseFloat(item.amount) || 0;
+      });
+      
+      // Populate table
+      const tableBody = document.getElementById('voucher-table-body');
+      tableBody.innerHTML = '';
+      
+      let serialNo = 1;
+      let totalAmount = 0;
+      
+      Object.entries(itemMap).forEach(([itemName, totalItemAmount]) => {
+        const row = document.createElement('tr');
+        row.className = serialNo % 2 === 0 ? 'bg-gray-50' : 'bg-white';
+        
+        const cell1 = document.createElement('td');
+        cell1.className = 'border-2 border-gray-300 p-3 text-center font-bengali';
+        cell1.textContent = serialNo;
+        
+        const cell2 = document.createElement('td');
+        cell2.className = 'border-2 border-gray-300 p-3 text-left font-bengali';
+        cell2.textContent = itemName;
+        
+        const cell3 = document.createElement('td');
+        cell3.className = 'border-2 border-gray-300 p-3 text-right font-english font-bold';
+        cell3.textContent = formatCurrency(totalItemAmount);
+        
+        row.appendChild(cell1);
+        row.appendChild(cell2);
+        row.appendChild(cell3);
+        tableBody.appendChild(row);
+        
+        totalAmount += totalItemAmount;
+        serialNo++;
+      });
+      
+      // Update totals
+      document.getElementById('voucher-total').textContent = formatCurrency(totalAmount);
+      document.getElementById('voucher-amount-words').textContent = numberToWords(Math.floor(totalAmount));
+    }
+    
+    // Print Voucher
+    function printVoucher() {
+      window.print();
+      showToast('প্রিন্ট উইন্ডো খোলা হয়েছে', 'info');
+    }
+    
+    // Download as PDF
+    function downloadVoucher() {
+      const printWindow = window.open('', '_blank');
+      const voucherContent = document.getElementById('voucher-container').innerHTML;
+      
+      printWindow.document.write(`
+        <!DOCTYPE html>
+        <html lang="bn">
+        <head>
+          <meta charset="UTF-8">
+          <title>Income & Expense Voucher</title>
+          <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@300;400;500;600;700&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+          <style>
+            * { font-family: 'Hind Siliguri', 'Poppins', sans-serif; }
+            body { margin: 20px; background: white; }
+            ${document.querySelector('style').innerText}
+            @media print { .signature-row { page-break-inside: avoid; } }
+          </style>
+        </head>
+        <body>
+          ${voucherContent}
+        </body>
+        </html>
+      `);
+      printWindow.document.close();
+      
+      setTimeout(() => {
+        printWindow.print();
+      }, 500);
+      
+      showToast('রশিদ ডাউনলোডের জন্য প্রস্তুত', 'info');
+    }
+    
+    // Reset Filters
+    function resetFilters() {
+      document.getElementById('type-filter').value = '';
+      document.getElementById('date-filter').value = '';
+      document.getElementById('empty-state').classList.remove('hidden');
+      document.getElementById('error-state').classList.add('hidden');
+      document.getElementById('voucher-container').classList.add('hidden');
+      document.getElementById('loading-state').classList.add('hidden');
+    }
+    
+    // Set today's date by default
+    window.addEventListener('load', () => {
+      const today = new Date().toISOString().split('T')[0];
+      document.getElementById('date-filter').value = today;
+    });
+  </script>
+ <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9d5be84424a53a25',t:'MTc3MjQwNzM4NC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
